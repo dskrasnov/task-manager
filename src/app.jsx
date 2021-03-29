@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-
 import {
   AppBar,
   Button,
@@ -16,7 +14,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import Pagination from '@material-ui/lab/Pagination';
 
-import TaskCard from './components/task-card';
+import TaskList from './components/task-list';
 
 const TASKS = [
   {
@@ -42,69 +40,48 @@ const TASKS = [
   },
 ];
 
-const useStyles = makeStyles(theme => ({
-  grid: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
-}));
-
-function App() {
-  const classes = useStyles();
-
-  return (
-    <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Задачи</Typography>
-          <div style={{ flexGrow: 1 }}/>
-          <Button color="inherit">Войти</Button>
-        </Toolbar>
-      </AppBar>
-
+const App = () => (
+  <>
+    <AppBar position="static">
       <Toolbar>
-        <Grid container justify="space-between" alignItems="center">
-          <Grid item>
-            <Button variant="contained" color="secondary">Создать</Button>
-          </Grid>
-          <Grid item>
-            <NativeSelect value="">
-              <option value="">Без сортировки</option>
-              <option value="username">Пользователь</option>
-              <option value="email">Электронная почта</option>
-              <option value="status">Статус</option>
-            </NativeSelect>
-            <IconButton aria-label="По возрастанию">
-              <ArrowDownwardIcon/>
-            </IconButton>
-          </Grid>
-        </Grid>
+        <Typography variant="h6">Задачи</Typography>
+        <div style={{ flexGrow: 1 }}/>
+        <Button color="inherit">Войти</Button>
       </Toolbar>
+    </AppBar>
 
-      <div style={{ padding: 8 }}>
-        <Grid container spacing={2} className={classes.grid}>
-          {
-            TASKS.map(task => (
-              <Grid key={task.id} item xs={12} md={4}>
-                <TaskCard text={task.text} email={task.email} username={task.username}/>
-              </Grid>
-            ))
-          }
-        </Grid>
-      </div>
-
-      <Grid
-        container
-        alignItems="center"
-        justify="center"
-        style={{ paddingBottom: 8 }}
-      >
+    <Toolbar>
+      <Grid container justify="space-between" alignItems="center">
         <Grid item>
-          <Pagination count={100} variant="outlined" shape="rounded"/>
+          <Button variant="contained" color="secondary">Создать</Button>
+        </Grid>
+        <Grid item>
+          <NativeSelect value="">
+            <option value="">Без сортировки</option>
+            <option value="username">Пользователь</option>
+            <option value="email">Электронная почта</option>
+            <option value="status">Статус</option>
+          </NativeSelect>
+          <IconButton aria-label="По возрастанию">
+            <ArrowDownwardIcon/>
+          </IconButton>
         </Grid>
       </Grid>
-    </>
-  );
-}
+    </Toolbar>
+
+    <TaskList tasks={TASKS}/>
+
+    <Grid
+      container
+      alignItems="center"
+      justify="center"
+      style={{ paddingBottom: 8 }}
+    >
+      <Grid item>
+        <Pagination count={100} variant="outlined" shape="rounded"/>
+      </Grid>
+    </Grid>
+  </>
+);
 
 export default App;
