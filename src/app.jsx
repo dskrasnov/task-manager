@@ -4,24 +4,19 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import {
   AppBar,
-  Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Grid,
   IconButton,
   NativeSelect,
   Toolbar,
-  Tooltip,
   Typography,
 } from '@material-ui/core';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
 
 import Pagination from '@material-ui/lab/Pagination';
+
+import TaskCard from './components/task-card';
 
 const TASKS = [
   {
@@ -91,52 +86,7 @@ function App() {
           {
             TASKS.map(task => (
               <Grid key={task.id} item xs={12} md={4}>
-                <Card style={{ position: 'relative' }}>
-                  <Box style={{ position: 'absolute', top: 2, right: 2 }}>
-                    <Tooltip title="Отредактирована">
-                      <EditIcon fontSize="small"/>
-                    </Tooltip>
-                    <Tooltip title="Выполнена">
-                      <DoneIcon fontSize="small"/>
-                    </Tooltip>
-                  </Box>
-
-                  <CardContent>
-                    <Typography component="span">
-                      <b>Пользователь:</b>
-                    </Typography>
-                    <Typography paragraph noWrap>
-                      {task.username}
-                    </Typography>
-
-                    <Typography component="span">
-                      <b>Электронная почта:</b>
-                    </Typography>
-                    <Typography paragraph noWrap>
-                      {task.email}
-                    </Typography>
-
-                    <Typography component="span">
-                      <b>Текст задачи:</b>
-                    </Typography>
-                    <Typography paragraph>
-                      {task.text}
-                    </Typography>
-                  </CardContent>
-
-                  <CardActions>
-                    <Tooltip title="Редактировать">
-                      <IconButton>
-                        <EditIcon/>
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Отметить выполненной">
-                      <IconButton>
-                        <DoneIcon/>
-                      </IconButton>
-                    </Tooltip>
-                  </CardActions>
-                </Card>
+                <TaskCard text={task.text} email={task.email} username={task.username}/>
               </Grid>
             ))
           }
