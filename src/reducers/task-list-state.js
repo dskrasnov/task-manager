@@ -2,6 +2,8 @@ import { SET_TASK_LIST_STATE } from '../constants/action-types';
 
 const defaultState = {
   isInitialDataLoaded: false,
+  pagesTotal: 0,
+  currentPage: 0,
 };
 
 const taskListStateReducer = (state = defaultState, { type, payload }) => {

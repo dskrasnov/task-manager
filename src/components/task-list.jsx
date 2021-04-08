@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import { Grid, Typography } from '@material-ui/core';
 
@@ -7,8 +7,10 @@ import TaskCard from './task-card';
 
 import useStyles from '../styles';
 
-const TaskList = ({ tasks }) => {
+const TaskList = () => {
   const classes = useStyles();
+
+  const tasks = useSelector(state => state.tasks);
 
   return (
     <div className={classes.gridWrapper}>
@@ -29,17 +31,6 @@ const TaskList = ({ tasks }) => {
       </Grid>
     </div>
   );
-};
-
-TaskList.propTypes = {
-  tasks: PropTypes.arrayOf(
-    PropTypes.shape({
-      username: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-      status: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
 };
 
 export default TaskList;

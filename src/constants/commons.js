@@ -5,3 +5,5 @@ export const BACKEND_STATUS = {
   OK: 'ok',
   ERROR: 'error',
 };
+
+export const TASKS_PER_PAGE = 3;

@@ -13,24 +13,19 @@ import {
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
-import Pagination from '@material-ui/lab/Pagination';
-
 import AppLoadingIndicator from './components/app-loading-indicator';
 import AlertList from './components/alert-list';
 import TaskList from './components/task-list';
+import TaskPagination from './components/task-pagination';
 
 import fetchTasks from './action-creators/fetch-tasks';
 
 const App = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchTasks(true));
-  }, []);
+  useEffect(() => dispatch(fetchTasks(1, true)), []);
 
   const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);
-  const errors = useSelector(state => state.errors);
-  const tasks = useSelector(state => state.tasks);
 
   return (
     <>
@@ -51,11 +46,7 @@ const App = () => {
               </Toolbar>
             </AppBar>
 
-            {
-              !!errors.length && (
-                <AlertList errors={errors}/>
-              )
-            }
+            <AlertList/>
 
             <Toolbar>
               <Grid container justify="space-between" alignItems="center">
@@ -76,18 +67,9 @@ const App = () => {
               </Grid>
             </Toolbar>
 
-            <TaskList tasks={tasks}/>
+            <TaskList/>
 
-            <Grid
-              container
-              alignItems="center"
-              justify="center"
-              style={{ paddingBottom: 8 }}
-            >
-              <Grid item>
-                <Pagination count={100} variant="outlined" shape="rounded"/>
-              </Grid>
-            </Grid>
+            <TaskPagination/>
           </>
         )
       }

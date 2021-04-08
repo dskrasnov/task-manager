@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
 
@@ -10,12 +9,14 @@ import useStyles from '../styles';
 
 import removeError from '../action-creators/remove-error';
 
-const AlertList = ({ errors }) => {
+const AlertList = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-
   const closeHandler = useCallback(id => dispatch(removeError(id)), []);
+
+  const errors = useSelector(state => state.errors);
+  if (!errors.length) return null;
 
   return (
     <div className={classes.gridWrapper}>
@@ -30,15 +31,6 @@ const AlertList = ({ errors }) => {
       </Grid>
     </div>
   );
-};
-
-AlertList.propTypes = {
-  errors: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
 };
 
 export default AlertList;
