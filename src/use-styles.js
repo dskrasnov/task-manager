@@ -2,11 +2,16 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   grid: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
   },
   gridWrapper: {
-    padding: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+  },
+  taskPagination: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   appLoadingIndicator: {
     zIndex: theme.zIndex.drawer + 1,

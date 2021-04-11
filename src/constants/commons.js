@@ -7,3 +7,16 @@ export const BACKEND_STATUS = {
 };
 
 export const TASKS_PER_PAGE = 3;
+
+export const TASK_SORTING_FIELD = {
+  NO_SORTING: 'NO_SORTING',
+  ID: 'id',
+  USERNAME: 'username',
+  EMAIL: 'email',
+  STATUS: 'status',
+};
+
+export const TASK_SORTING_DIRECTION = {
+  ASC: 'asc',
+  DESC: 'desc',
+};

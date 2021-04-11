@@ -6,8 +6,11 @@ import { Grid } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 
 import fetchTasks from '../action-creators/fetch-tasks';
+import useStyles from '../use-styles';
 
 const TaskPagination = () => {
+  const classes = useStyles();
+
   const pagesTotal = useSelector(state => state.taskListState.pagesTotal);
   const currentPage = useSelector(state => state.taskListState.currentPage);
 
@@ -15,8 +18,8 @@ const TaskPagination = () => {
 
   if (pagesTotal < 2) return null;
 
-  const changeHandler = (event, value) => {
-    dispatch(fetchTasks(value));
+  const changePage = (event, value) => {
+    dispatch(fetchTasks({ currentPage: value }));
   };
 
   return (
@@ -24,7 +27,7 @@ const TaskPagination = () => {
       container
       alignItems="center"
       justify="center"
-      style={{ paddingBottom: 8 }}
+      className={classes.taskPagination}
     >
       <Grid item>
         <Pagination
@@ -33,7 +36,7 @@ const TaskPagination = () => {
           count={pagesTotal}
           page={currentPage}
           /* eslint-disable-next-line react/jsx-no-bind */
-          onChange={changeHandler}
+          onChange={changePage}
         />
       </Grid>
     </Grid>

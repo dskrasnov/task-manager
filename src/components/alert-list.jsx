@@ -5,7 +5,7 @@ import { Grid } from '@material-ui/core';
 
 import ErrorAlert from './error-alert';
 
-import useStyles from '../styles';
+import useStyles from '../use-styles';
 
 import removeError from '../action-creators/remove-error';
 
@@ -13,7 +13,7 @@ const AlertList = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const closeHandler = useCallback(id => dispatch(removeError(id)), []);
+  const closeErrorAlert = useCallback(id => dispatch(removeError(id)), [dispatch]);
 
   const errors = useSelector(state => state.errors);
   if (!errors.length) return null;
@@ -24,7 +24,7 @@ const AlertList = () => {
         {
           errors.map(error => (
             <Grid key={error.id} item>
-              <ErrorAlert error={error} onClose={closeHandler}/>
+              <ErrorAlert error={error} onClose={closeErrorAlert}/>
             </Grid>
           ))
         }

@@ -4,28 +4,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   AppBar,
   Button,
-  Grid,
-  IconButton,
-  NativeSelect,
   Toolbar,
   Typography,
 } from '@material-ui/core';
 
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-
 import AppLoadingIndicator from './components/app-loading-indicator';
 import AlertList from './components/alert-list';
+import MainToolbar from './components/main-toolbar';
 import TaskList from './components/task-list';
 import TaskPagination from './components/task-pagination';
 
 import fetchTasks from './action-creators/fetch-tasks';
 
 const App = () => {
+  const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);
+
   const dispatch = useDispatch();
 
-  useEffect(() => dispatch(fetchTasks(1, true)), []);
-
-  const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);
+  useEffect(
+    () => dispatch(fetchTasks({ currentPage: 1 }, true)),
+    [dispatch],
+  );
 
   return (
     <>
@@ -48,24 +47,7 @@ const App = () => {
 
             <AlertList/>
 
-            <Toolbar>
-              <Grid container justify="space-between" alignItems="center">
-                <Grid item>
-                  <Button variant="contained" color="secondary">Создать</Button>
-                </Grid>
-                <Grid item>
-                  <NativeSelect value="">
-                    <option value="">Без сортировки</option>
-                    <option value="username">Пользователь</option>
-                    <option value="email">Электронная почта</option>
-                    <option value="status">Статус</option>
-                  </NativeSelect>
-                  <IconButton aria-label="По возрастанию">
-                    <ArrowDownwardIcon/>
-                  </IconButton>
-                </Grid>
-              </Grid>
-            </Toolbar>
+            <MainToolbar/>
 
             <TaskList/>
 
