@@ -7,6 +7,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 import fetchTasks from '../action-creators/fetch-tasks';
+import setTaskManageDialogOpen from '../action-creators/set-task-manage-dialog-open';
 
 import { TASK_SORTING_DIRECTION, TASK_SORTING_FIELD } from '../constants/commons';
 
@@ -28,6 +29,11 @@ const MainToolbar = () => {
   const sortingDirectionLabel = isSortingDirectionAsc ? 'По убыванию' : 'По возрастанию';
 
   const dispatch = useDispatch();
+
+  const openCreateTaskDialog = useCallback(
+    () => dispatch(setTaskManageDialogOpen(true)),
+    [dispatch],
+  );
 
   const changeSortingField = useCallback(
     ({ target: { value } }) => dispatch(fetchTasks(
@@ -55,7 +61,13 @@ const MainToolbar = () => {
         spacing={2}
       >
         <Grid item>
-          <Button variant="contained" color="secondary">Создать</Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={openCreateTaskDialog}
+          >
+            Создать
+          </Button>
         </Grid>
 
         <Grid

@@ -15,6 +15,7 @@ import TaskList from './components/task-list';
 import TaskPagination from './components/task-pagination';
 
 import fetchTasks from './action-creators/fetch-tasks';
+import TaskManageDialog from './components/task-manage-dialog';
 
 const App = () => {
   const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);
@@ -52,6 +53,8 @@ const App = () => {
             <TaskList/>
 
             <TaskPagination/>
+
+            <TaskManageDialog/>
           </>
         )
       }

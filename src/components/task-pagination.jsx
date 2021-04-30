@@ -6,6 +6,7 @@ import { Grid } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 
 import fetchTasks from '../action-creators/fetch-tasks';
+
 import useStyles from '../use-styles';
 
 const TaskPagination = () => {
@@ -35,7 +36,7 @@ const TaskPagination = () => {
           shape="rounded"
           count={pagesTotal}
           page={currentPage}
-          /* eslint-disable-next-line react/jsx-no-bind */
+          // eslint-disable-next-line react/jsx-no-bind
           onChange={changePage}
         />
       </Grid>

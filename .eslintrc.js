@@ -1,5 +1,8 @@
 module.exports = {
   extends: 'airbnb',
+  env: {
+    browser: true,
+  },
   plugins: ['react-hooks'],
   rules: {
     // Заставляет создавать ненужные статические методы или отдельные функции.
@@ -243,6 +246,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
 
     // Проверяем зависимости эффекта
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
   },
 };

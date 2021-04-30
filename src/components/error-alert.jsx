@@ -11,7 +11,7 @@ const ErrorAlert = ({ error: { id, text }, onClose }) => {
       severity="error"
       variant="filled"
       closeText="Закрыть"
-      /* eslint-disable-next-line react/jsx-no-bind */
+      // eslint-disable-next-line react/jsx-no-bind
       onClose={closeHandler}
     >
       <AlertTitle>Ошибка</AlertTitle>

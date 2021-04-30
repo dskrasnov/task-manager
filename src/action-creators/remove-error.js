@@ -1,8 +1,8 @@
 import { REMOVE_ERROR } from '../constants/action-types';
 
-const removeError = id => ({
+const removeError = errorId => ({
   type: REMOVE_ERROR,
-  payload: id,
+  payload: errorId,
 });
 
 export default removeError;

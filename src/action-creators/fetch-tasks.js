@@ -7,12 +7,13 @@ import setTaskListState from './set-task-list-state';
 import {
   BACKEND_STATUS,
   BACKEND_URL,
-  DEVELOPER_NAME, TASK_SORTING_FIELD,
+  DEVELOPER_NAME,
+  TASK_SORTING_FIELD,
   TASKS_PER_PAGE,
 } from '../constants/commons';
 
 const fetchTasks = (
-  { currentPage, sortingField, sortingDirection },
+  { currentPage, sortingField, sortingDirection } = {},
   isInitialDataLoading,
 ) => (dispatch, getState) => {
   const { taskListState } = getState();
