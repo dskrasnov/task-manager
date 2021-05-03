@@ -1,21 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  AppBar,
-  Button,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
-
 import AppLoadingIndicator from './components/app-loading-indicator';
+import Header from './components/header';
 import AlertList from './components/alert-list';
 import MainToolbar from './components/main-toolbar';
 import TaskList from './components/task-list';
 import TaskPagination from './components/task-pagination';
-
-import fetchTasks from './action-creators/fetch-tasks';
 import TaskManageDialog from './components/task-manage-dialog';
+import LoginDialog from './components/login-dialog';
+
+import readAuthorizationData from './action-creators/read-authorization-data';
+import fetchTasks from './action-creators/fetch-tasks';
 
 const App = () => {
   const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);
@@ -23,7 +19,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(
-    () => dispatch(fetchTasks({ currentPage: 1 }, true)),
+    () => {
+      dispatch(readAuthorizationData());
+      dispatch(fetchTasks({ currentPage: 1 }, true));
+    },
     [dispatch],
   );
 
@@ -38,13 +37,7 @@ const App = () => {
       {
         isInitialDataLoaded && (
           <>
-            <AppBar position="static">
-              <Toolbar>
-                <Typography variant="h6">Задачи</Typography>
-                <div style={{ flexGrow: 1 }}/>
-                <Button color="inherit">Войти</Button>
-              </Toolbar>
-            </AppBar>
+            <Header/>
 
             <AlertList/>
 
@@ -55,6 +48,8 @@ const App = () => {
             <TaskPagination/>
 
             <TaskManageDialog/>
+
+            <LoginDialog/>
           </>
         )
       }

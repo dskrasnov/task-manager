@@ -21,6 +21,8 @@ import resetTaskManageDialogGeneralError from '../action-creators/reset-task-man
 import resetTaskManageDialogState from '../action-creators/reset-task-manage-dialog-state';
 import createTask from '../action-creators/create-task';
 
+import { FIELD_EMPTY_ERROR } from '../constants/commons';
+
 const TaskManageDialog = () => {
   const usernameFieldValue = useSelector(state => state.taskManageDialogState.fieldValue.username);
   const emailFieldValue = useSelector(state => state.taskManageDialogState.fieldValue.email);
@@ -63,7 +65,6 @@ const TaskManageDialog = () => {
 
   const validate = useCallback(
     fieldValue => {
-      const FIELD_EMPTY_ERROR = 'Поле не может быть пустым';
       const EMAIL_REGEXP = /.+@.+\..+/;
 
       return ({

@@ -20,3 +20,5 @@ export const TASK_SORTING_DIRECTION = {
   ASC: 'asc',
   DESC: 'desc',
 };
+
+export const FIELD_EMPTY_ERROR = 'Поле не может быть пустым';
