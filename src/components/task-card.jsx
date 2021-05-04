@@ -14,59 +14,87 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 
-const TaskCard = ({ username, email, text }) => (
-  <Card style={{ position: 'relative' }}>
-    <Box style={{ position: 'absolute', top: 2, right: 2 }}>
-      <Tooltip title="Отредактирована">
-        <EditIcon fontSize="small"/>
-      </Tooltip>
-      <Tooltip title="Выполнена">
-        <DoneIcon fontSize="small"/>
-      </Tooltip>
-    </Box>
+const EDITED = 0b01;
+const DONE = 0b10;
 
-    <CardContent>
-      <Typography component="span">
-        <b>Пользователь:</b>
-      </Typography>
-      <Typography paragraph noWrap>
-        {username}
-      </Typography>
+const TaskCard = ({ username, email, text, status }) => {
+  const binaryStatus = parseInt(status, 2);
 
-      <Typography component="span">
-        <b>Электронная почта:</b>
-      </Typography>
-      <Typography paragraph noWrap>
-        {email}
-      </Typography>
+  /* eslint-disable no-bitwise */
 
-      <Typography component="span">
-        <b>Текст задачи:</b>
-      </Typography>
-      <Typography paragraph>
-        {text}
-      </Typography>
-    </CardContent>
+  const isEdited = !!(binaryStatus & EDITED);
+  const isDone = !!(binaryStatus & DONE);
 
-    <CardActions>
-      <Tooltip title="Редактировать">
-        <IconButton>
-          <EditIcon/>
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Отметить выполненной">
-        <IconButton>
-          <DoneIcon/>
-        </IconButton>
-      </Tooltip>
-    </CardActions>
-  </Card>
-);
+  /* eslint-enable no-bitwise */
+
+  return (
+    <Card style={{ position: 'relative' }}>
+      {
+        (isEdited || isDone) && (
+          <Box style={{ position: 'absolute', top: 2, right: 2 }}>
+            {
+              isEdited && (
+                <Tooltip title="Отредактирована">
+                  <EditIcon fontSize="small"/>
+                </Tooltip>
+              )
+            }
+
+            {
+              isDone && (
+                <Tooltip title="Выполнена">
+                  <DoneIcon fontSize="small"/>
+                </Tooltip>
+              )
+            }
+          </Box>
+        )
+      }
+
+      <CardContent>
+        <Typography component="span">
+          <b>Пользователь:</b>
+        </Typography>
+        <Typography paragraph noWrap>
+          {username}
+        </Typography>
+
+        <Typography component="span">
+          <b>Электронная почта:</b>
+        </Typography>
+        <Typography paragraph noWrap>
+          {email}
+        </Typography>
+
+        <Typography component="span">
+          <b>Текст задачи:</b>
+        </Typography>
+        <Typography paragraph>
+          {text}
+        </Typography>
+      </CardContent>
+
+      <CardActions>
+        <Tooltip title="Редактировать">
+          <IconButton>
+            <EditIcon/>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Отметить выполненной">
+          <IconButton>
+            <DoneIcon/>
+          </IconButton>
+        </Tooltip>
+      </CardActions>
+    </Card>
+  );
+};
 
 TaskCard.propTypes = {
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  status: PropTypes.number.isRequired,
 };
 
 export default TaskCard;
