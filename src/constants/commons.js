@@ -22,3 +22,8 @@ export const TASK_SORTING_DIRECTION = {
 };
 
 export const FIELD_EMPTY_ERROR = 'Поле не может быть пустым';
+
+export const TASK_STATUS_MASK = {
+  EDITED: 0b01,
+  DONE: 0b10,
+};

@@ -1,31 +1,56 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
-  IconButton,
   Tooltip,
   Typography,
 } from '@material-ui/core';
 
 import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
+import CheckBox from '@material-ui/icons/CheckBox';
 
-const EDITED = 0b01;
-const DONE = 0b10;
+import setTaskManageDialogOpen from '../action-creators/set-task-manage-dialog-open';
+import setTaskManageDialogFieldValue from '../action-creators/set-task-manage-dialog-field-value';
 
-const TaskCard = ({ username, email, text, status }) => {
+import { TASK_STATUS_MASK } from '../constants/commons';
+
+const TaskCard = ({ id, username, email, text, status }) => {
   const binaryStatus = parseInt(status, 2);
 
   /* eslint-disable no-bitwise */
 
-  const isEdited = !!(binaryStatus & EDITED);
-  const isDone = !!(binaryStatus & DONE);
+  const isEdited = !!(binaryStatus & TASK_STATUS_MASK.EDITED);
+  const isDone = !!(binaryStatus & TASK_STATUS_MASK.DONE);
 
   /* eslint-enable no-bitwise */
+
+  const isAuthorized = !!useSelector(state => state.authorizationState.token);
+
+  const dispatch = useDispatch();
+
+  const openEditTaskDialog = useCallback(
+    () => {
+      dispatch(setTaskManageDialogFieldValue({
+        id,
+        username,
+        email,
+        text,
+        oldText: text,
+        status,
+        isAlreadyEdited: isEdited,
+      }));
+
+      dispatch(setTaskManageDialogOpen(true));
+    },
+    [dispatch, id, username, email, text, status, isEdited],
+  );
 
   return (
     <Card style={{ position: 'relative' }}>
@@ -43,7 +68,7 @@ const TaskCard = ({ username, email, text, status }) => {
             {
               isDone && (
                 <Tooltip title="Выполнена">
-                  <DoneIcon fontSize="small"/>
+                  <CheckBox fontSize="small"/>
                 </Tooltip>
               )
             }
@@ -74,23 +99,21 @@ const TaskCard = ({ username, email, text, status }) => {
         </Typography>
       </CardContent>
 
-      <CardActions>
-        <Tooltip title="Редактировать">
-          <IconButton>
-            <EditIcon/>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Отметить выполненной">
-          <IconButton>
-            <DoneIcon/>
-          </IconButton>
-        </Tooltip>
-      </CardActions>
+      {
+        isAuthorized && (
+          <CardActions>
+            <Button size="small" color="primary" onClick={openEditTaskDialog}>
+              Редактировать
+            </Button>
+          </CardActions>
+        )
+      }
     </Card>
   );
 };
 
 TaskCard.propTypes = {
+  id: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,

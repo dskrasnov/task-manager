@@ -65,6 +65,7 @@ const LoginDialog = () => {
       ...(fieldValue.username !== undefined
         && fieldValue.username.length === 0
         && { username: FIELD_EMPTY_ERROR }),
+
       ...(fieldValue.password !== undefined
         && fieldValue.password.length === 0
         && { password: FIELD_EMPTY_ERROR }),

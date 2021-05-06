@@ -15,7 +15,9 @@ const defaultState = {
     username: '',
     email: '',
     text: '',
+    oldText: null,
     status: null,
+    isAlreadyEdited: false,
   },
   fieldError: {
     username: null,

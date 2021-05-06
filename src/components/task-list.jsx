@@ -24,9 +24,10 @@ const TaskList = () => {
             ? tasks.map(task => (
               <Grid key={task.id} item xs={12} md={MD_GRID_SIZE}>
                 <TaskCard
-                  text={task.text}
-                  email={task.email}
+                  id={task.id}
                   username={task.username}
+                  email={task.email}
+                  text={task.text}
                   status={task.status}
                 />
               </Grid>
