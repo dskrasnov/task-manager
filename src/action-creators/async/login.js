@@ -1,18 +1,18 @@
-import Cookies from 'js-cookie';
-
 import axios from 'axios';
 
-import resetLoginDialogState from './reset-login-dialog-state';
-import setLoginDialogFieldError from './set-login-dialog-field-error';
-import setLoginDialogBusy from './set-login-dialog-busy';
-import setLoginDialogGeneralError from './set-login-dialog-general-error';
+import Cookies from 'js-cookie';
+
+import resetLoginDialogState from '../reset-login-dialog-state';
+import setLoginDialogFieldError from '../set-login-dialog-field-error';
+import setLoginDialogBusy from '../set-login-dialog-busy';
+import setLoginDialogGeneralError from '../set-login-dialog-general-error';
 import readAuthorizationData from './read-authorization-data';
 
 import {
   BACKEND_STATUS,
   BACKEND_URL,
   DEVELOPER_NAME,
-} from '../constants/commons';
+} from '../../constants/commons';
 
 const login = () => (dispatch, getState) => {
   const { loginDialogState: { fieldValue: { username, password } } } = getState();

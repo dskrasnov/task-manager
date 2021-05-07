@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import setTasks from './set-tasks';
-import addError from './add-error';
-import setTaskListState from './set-task-list-state';
+import setTasks from '../set-tasks';
+import addError from '../add-error';
+import setTaskListState from '../set-task-list-state';
 
 import {
   BACKEND_STATUS,
@@ -10,7 +10,7 @@ import {
   DEVELOPER_NAME,
   TASK_SORTING_FIELD,
   TASKS_PER_PAGE,
-} from '../constants/commons';
+} from '../../constants/commons';
 
 const fetchTasks = (
   { currentPage, sortingField, sortingDirection } = {},

@@ -21,8 +21,8 @@ import setTaskManageDialogFieldError from '../action-creators/set-task-manage-di
 import resetTaskManageDialogFieldError from '../action-creators/reset-task-manage-dialog-field-error';
 import resetTaskManageDialogGeneralError from '../action-creators/reset-task-manage-dialog-general-error';
 import resetTaskManageDialogState from '../action-creators/reset-task-manage-dialog-state';
-import createTask from '../action-creators/create-task';
-import editTask from '../action-creators/edit-task';
+import createTask from '../action-creators/async/create-task';
+import editTask from '../action-creators/async/edit-task';
 
 import { FIELD_EMPTY_ERROR, TASK_STATUS_MASK } from '../constants/commons';
 

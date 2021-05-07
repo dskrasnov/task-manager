@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
-import setAuthorizationState from './set-authorization-state';
-import resetAuthorizationState from './reset-authorization-state';
+import setAuthorizationState from '../set-authorization-state';
+import resetAuthorizationState from '../reset-authorization-state';
 
 const readAuthorizationData = () => dispatch => {
   const token = Cookies.get('token');

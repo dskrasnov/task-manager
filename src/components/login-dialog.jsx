@@ -19,7 +19,7 @@ import setLoginDialogFieldError from '../action-creators/set-login-dialog-field-
 import resetLoginDialogFieldError from '../action-creators/reset-login-dialog-field-error';
 import resetLoginDialogGeneralError from '../action-creators/reset-login-dialog-general-error';
 import resetLoginDialogState from '../action-creators/reset-login-dialog-state';
-import login from '../action-creators/login';
+import login from '../action-creators/async/login';
 
 import { FIELD_EMPTY_ERROR } from '../constants/commons';
 
