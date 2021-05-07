@@ -1,19 +1,20 @@
 import axios from 'axios';
 
 import fetchTasks from './fetch-tasks';
-import resetTaskManageDialogState from '../reset-task-manage-dialog-state';
-import setTaskManageDialogFieldError from '../set-task-manage-dialog-field-error';
-import setTaskManageDialogBusy from '../set-task-manage-dialog-busy';
-import setTaskManageDialogGeneralError from '../set-task-manage-dialog-general-error';
+import resetDialogState from '../reset-dialog-state';
+import setDialogFieldError from '../set-dialog-field-error';
+import setDialogBusy from '../set-dialog-busy';
+import setDialogGeneralError from '../set-dialog-general-error';
 
 import {
   BACKEND_STATUS,
   BACKEND_URL,
   DEVELOPER_NAME,
+  DIALOG_NAME,
 } from '../../constants/commons';
 
 const createTask = () => (dispatch, getState) => {
-  const { taskManageDialogState: { fieldValue: { username, email, text } } } = getState();
+  const { dialogState: { [DIALOG_NAME.TASK_MANAGE]: { fieldValue: { username, email, text } } } } = getState();
 
   const formData = new FormData();
 
@@ -21,24 +22,24 @@ const createTask = () => (dispatch, getState) => {
   formData.append('email', email);
   formData.append('text', text);
 
-  dispatch(setTaskManageDialogBusy(true));
+  dispatch(setDialogBusy(DIALOG_NAME.TASK_MANAGE, true));
 
   return axios
     .post(`${BACKEND_URL}create?developer=${DEVELOPER_NAME}`, formData)
     .then(({ data: { message, status } }) => {
       if (status === BACKEND_STATUS.OK) {
         dispatch(fetchTasks());
-        dispatch(resetTaskManageDialogState());
+        dispatch(resetDialogState(DIALOG_NAME.TASK_MANAGE));
       }
 
       if (status === BACKEND_STATUS.ERROR) {
-        dispatch(setTaskManageDialogFieldError(message));
-        dispatch(setTaskManageDialogBusy(false));
+        dispatch(setDialogFieldError(DIALOG_NAME.TASK_MANAGE, message));
+        dispatch(setDialogBusy(DIALOG_NAME.TASK_MANAGE, false));
       }
     })
     .catch(() => {
-      dispatch(setTaskManageDialogGeneralError('При создании задачи что-то пошло не так.'));
-      dispatch(setTaskManageDialogBusy(false));
+      dispatch(setDialogGeneralError(DIALOG_NAME.TASK_MANAGE, 'При создании задачи что-то пошло не так.'));
+      dispatch(setDialogBusy(DIALOG_NAME.TASK_MANAGE, false));
     });
 };
 

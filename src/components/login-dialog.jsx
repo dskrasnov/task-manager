@@ -14,31 +14,31 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 import BusiableButton from './busiable-button';
 
-import setLoginDialogFieldValue from '../action-creators/set-login-dialog-field-value';
-import setLoginDialogFieldError from '../action-creators/set-login-dialog-field-error';
-import resetLoginDialogFieldError from '../action-creators/reset-login-dialog-field-error';
-import resetLoginDialogGeneralError from '../action-creators/reset-login-dialog-general-error';
-import resetLoginDialogState from '../action-creators/reset-login-dialog-state';
+import setDialogFieldValue from '../action-creators/set-dialog-field-value';
+import setDialogFieldError from '../action-creators/set-dialog-field-error';
+import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
+import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
+import resetDialogState from '../action-creators/reset-dialog-state';
 import login from '../action-creators/async/login';
 
-import { FIELD_EMPTY_ERROR } from '../constants/commons';
+import { DIALOG_NAME, FIELD_EMPTY_ERROR } from '../constants/commons';
 
 const LoginDialog = () => {
-  const usernameFieldValue = useSelector(state => state.loginDialogState.fieldValue.username);
-  const passwordFieldValue = useSelector(state => state.loginDialogState.fieldValue.password);
+  const usernameFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldValue.username);
+  const passwordFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldValue.password);
 
-  const usernameFieldError = useSelector(state => state.loginDialogState.fieldError.username);
-  const passwordFieldError = useSelector(state => state.loginDialogState.fieldError.password);
+  const usernameFieldError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldError.username);
+  const passwordFieldError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldError.password);
 
-  const generalError = useSelector(state => state.loginDialogState.generalError);
+  const generalError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].generalError);
 
   const isUsernameFieldInvalid = !!usernameFieldError;
   const isPasswordFieldInvalid = !!passwordFieldError;
 
   const isFormInvalid = isUsernameFieldInvalid || isPasswordFieldInvalid;
 
-  const isDialogOpen = useSelector(state => state.loginDialogState.isOpen);
-  const isDialogBusy = useSelector(state => state.loginDialogState.isBusy);
+  const isDialogOpen = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].isOpen);
+  const isDialogBusy = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].isBusy);
 
   const dispatch = useDispatch();
 
@@ -46,16 +46,16 @@ const LoginDialog = () => {
     () => {
       if (isDialogBusy) return;
 
-      dispatch(resetLoginDialogState());
+      dispatch(resetDialogState(DIALOG_NAME.LOGIN));
     },
     [isDialogBusy, dispatch],
   );
 
   const changeFormField = useCallback(
     event => {
-      dispatch(resetLoginDialogGeneralError());
-      dispatch(resetLoginDialogFieldError(event.target.name));
-      dispatch(setLoginDialogFieldValue({ [event.target.name]: event.target.value }));
+      dispatch(resetDialogGeneralError(DIALOG_NAME.LOGIN));
+      dispatch(resetDialogFieldError(DIALOG_NAME.LOGIN, event.target.name));
+      dispatch(setDialogFieldValue(DIALOG_NAME.LOGIN, { [event.target.name]: event.target.value }));
     },
     [dispatch],
   );
@@ -77,7 +77,7 @@ const LoginDialog = () => {
     event => {
       const fieldError = validate({ [event.target.name]: event.target.value });
 
-      dispatch(setLoginDialogFieldError(fieldError));
+      dispatch(setDialogFieldError(DIALOG_NAME.LOGIN, fieldError));
     },
     [dispatch, validate],
   );
@@ -86,14 +86,14 @@ const LoginDialog = () => {
     event => {
       event.preventDefault();
 
-      dispatch(resetLoginDialogGeneralError());
+      dispatch(resetDialogGeneralError(DIALOG_NAME.LOGIN));
 
       const fieldsError = validate({
         username: usernameFieldValue,
         password: passwordFieldValue,
       });
 
-      dispatch(setLoginDialogFieldError(fieldsError));
+      dispatch(setDialogFieldError(DIALOG_NAME.LOGIN, fieldsError));
 
       if (fieldsError.username || fieldsError.password) return;
 

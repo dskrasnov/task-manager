@@ -7,9 +7,13 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 import fetchTasks from '../action-creators/async/fetch-tasks';
-import setTaskManageDialogOpen from '../action-creators/set-task-manage-dialog-open';
+import setDialogOpen from '../action-creators/set-dialog-open';
 
-import { TASK_SORTING_DIRECTION, TASK_SORTING_FIELD } from '../constants/commons';
+import {
+  DIALOG_NAME,
+  TASK_SORTING_DIRECTION,
+  TASK_SORTING_FIELD,
+} from '../constants/commons';
 
 const TASK_SORTING_MODES = [
   { field: TASK_SORTING_FIELD.NO_SORTING, label: 'Без сортировки' },
@@ -31,7 +35,7 @@ const MainToolbar = () => {
   const dispatch = useDispatch();
 
   const openCreateTaskDialog = useCallback(
-    () => dispatch(setTaskManageDialogOpen(true)),
+    () => dispatch(setDialogOpen(DIALOG_NAME.TASK_MANAGE, true)),
     [dispatch],
   );
 

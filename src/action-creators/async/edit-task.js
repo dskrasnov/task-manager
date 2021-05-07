@@ -1,19 +1,20 @@
 import axios from 'axios';
 
 import fetchTasks from './fetch-tasks';
-import resetTaskManageDialogState from '../reset-task-manage-dialog-state';
-import setTaskManageDialogFieldError from '../set-task-manage-dialog-field-error';
-import setTaskManageDialogBusy from '../set-task-manage-dialog-busy';
-import setTaskManageDialogGeneralError from '../set-task-manage-dialog-general-error';
+import resetDialogState from '../reset-dialog-state';
+import setDialogFieldError from '../set-dialog-field-error';
+import setDialogBusy from '../set-dialog-busy';
+import setDialogGeneralError from '../set-dialog-general-error';
 
 import {
   BACKEND_STATUS,
   BACKEND_URL,
   DEVELOPER_NAME,
+  DIALOG_NAME,
 } from '../../constants/commons';
 
 const editTask = () => (dispatch, getState) => {
-  const { taskManageDialogState: { fieldValue: { id, text, status } } } = getState();
+  const { dialogState: { [DIALOG_NAME.TASK_MANAGE]: { fieldValue: { id, text, status } } } } = getState();
   const { authorizationState: { token } } = getState();
 
   const formData = new FormData();
@@ -22,28 +23,28 @@ const editTask = () => (dispatch, getState) => {
   formData.append('status', status);
   formData.append('token', token);
 
-  dispatch(setTaskManageDialogBusy(true));
+  dispatch(setDialogBusy(DIALOG_NAME.TASK_MANAGE, true));
 
   return axios
     .post(`${BACKEND_URL}edit/${id}?developer=${DEVELOPER_NAME}`, formData)
     .then(({ data: { message, status: responseStatus } }) => {
       if (responseStatus === BACKEND_STATUS.OK) {
         dispatch(fetchTasks());
-        dispatch(resetTaskManageDialogState());
+        dispatch(resetDialogState(DIALOG_NAME.TASK_MANAGE));
       }
 
       if (responseStatus === BACKEND_STATUS.ERROR) {
         const { token: tokenError, ...rest } = message;
 
-        if (tokenError) dispatch(setTaskManageDialogGeneralError(tokenError));
+        if (tokenError) dispatch(setDialogGeneralError(DIALOG_NAME.TASK_MANAGE, tokenError));
 
-        dispatch(setTaskManageDialogFieldError(rest));
-        dispatch(setTaskManageDialogBusy(false));
+        dispatch(setDialogFieldError(DIALOG_NAME.TASK_MANAGE, rest));
+        dispatch(setDialogBusy(DIALOG_NAME.TASK_MANAGE, false));
       }
     })
     .catch(() => {
-      dispatch(setTaskManageDialogGeneralError('При сохранении задачи что-то пошло не так.'));
-      dispatch(setTaskManageDialogBusy(false));
+      dispatch(setDialogGeneralError(DIALOG_NAME.TASK_MANAGE, 'При сохранении задачи что-то пошло не так.'));
+      dispatch(setDialogBusy(DIALOG_NAME.TASK_MANAGE, false));
     });
 };
 

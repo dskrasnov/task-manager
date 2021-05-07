@@ -16,10 +16,10 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import CheckBox from '@material-ui/icons/CheckBox';
 
-import setTaskManageDialogOpen from '../action-creators/set-task-manage-dialog-open';
-import setTaskManageDialogFieldValue from '../action-creators/set-task-manage-dialog-field-value';
+import setDialogOpen from '../action-creators/set-dialog-open';
+import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 
-import { TASK_STATUS_MASK } from '../constants/commons';
+import { DIALOG_NAME, TASK_STATUS_MASK } from '../constants/commons';
 
 const TaskCard = ({ id, username, email, text, status }) => {
   const binaryStatus = parseInt(status, 2);
@@ -37,7 +37,7 @@ const TaskCard = ({ id, username, email, text, status }) => {
 
   const openEditTaskDialog = useCallback(
     () => {
-      dispatch(setTaskManageDialogFieldValue({
+      dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, {
         id,
         username,
         email,
@@ -47,7 +47,7 @@ const TaskCard = ({ id, username, email, text, status }) => {
         isAlreadyEdited: isEdited,
       }));
 
-      dispatch(setTaskManageDialogOpen(true));
+      dispatch(setDialogOpen(DIALOG_NAME.TASK_MANAGE, true));
     },
     [dispatch, id, username, email, text, status, isEdited],
   );

@@ -27,3 +27,8 @@ export const TASK_STATUS_MASK = {
   EDITED: 0b01,
   DONE: 0b10,
 };
+
+export const DIALOG_NAME = {
+  TASK_MANAGE: 'taskManage',
+  LOGIN: 'login',
+};

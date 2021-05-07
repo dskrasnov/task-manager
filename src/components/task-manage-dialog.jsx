@@ -16,42 +16,46 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 import BusiableButton from './busiable-button';
 
-import setTaskManageDialogFieldValue from '../action-creators/set-task-manage-dialog-field-value';
-import setTaskManageDialogFieldError from '../action-creators/set-task-manage-dialog-field-error';
-import resetTaskManageDialogFieldError from '../action-creators/reset-task-manage-dialog-field-error';
-import resetTaskManageDialogGeneralError from '../action-creators/reset-task-manage-dialog-general-error';
-import resetTaskManageDialogState from '../action-creators/reset-task-manage-dialog-state';
+import setDialogFieldValue from '../action-creators/set-dialog-field-value';
+import setDialogFieldError from '../action-creators/set-dialog-field-error';
+import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
+import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
+import resetDialogState from '../action-creators/reset-dialog-state';
 import createTask from '../action-creators/async/create-task';
 import editTask from '../action-creators/async/edit-task';
 
-import { FIELD_EMPTY_ERROR, TASK_STATUS_MASK } from '../constants/commons';
+import {
+  DIALOG_NAME,
+  FIELD_EMPTY_ERROR,
+  TASK_STATUS_MASK,
+} from '../constants/commons';
 
 const TaskManageDialog = () => {
-  const taskId = useSelector(state => state.taskManageDialogState.fieldValue.id);
+  const taskId = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.id);
 
   const isTaskEditing = !!taskId;
 
   const dialogTitleText = isTaskEditing ? 'Редактирование задачи' : 'Создание задачи';
   const submitButtonLabel = isTaskEditing ? 'Сохранить' : 'Создать';
 
-  const usernameFieldValue = useSelector(state => state.taskManageDialogState.fieldValue.username);
-  const emailFieldValue = useSelector(state => state.taskManageDialogState.fieldValue.email);
-  const textFieldValue = useSelector(state => state.taskManageDialogState.fieldValue.text);
+  const usernameFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.username);
+  const emailFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.email);
+  const textFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.text);
 
-  const oldTaskText = useSelector(state => state.taskManageDialogState.fieldValue.oldText);
+  const oldTaskText = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.oldText);
 
-  const taskStatus = useSelector(state => state.taskManageDialogState.fieldValue.status);
+  const taskStatus = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.status);
   const binaryTaskStatus = parseInt(taskStatus, 2);
   // eslint-disable-next-line no-bitwise
   const isTaskDone = !!(binaryTaskStatus & TASK_STATUS_MASK.DONE);
 
-  const isAlreadyEdited = useSelector(state => state.taskManageDialogState.fieldValue.isAlreadyEdited);
+  const isAlreadyEdited = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.isAlreadyEdited);
 
-  const usernameFieldError = useSelector(state => state.taskManageDialogState.fieldError.username);
-  const emailFieldError = useSelector(state => state.taskManageDialogState.fieldError.email);
-  const textFieldError = useSelector(state => state.taskManageDialogState.fieldError.text);
+  const usernameFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.username);
+  const emailFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.email);
+  const textFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.text);
 
-  const generalError = useSelector(state => state.taskManageDialogState.generalError);
+  const generalError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].generalError);
 
   const isUsernameFieldInvalid = !!usernameFieldError;
   const isEmailFieldInvalid = !!emailFieldError;
@@ -59,8 +63,8 @@ const TaskManageDialog = () => {
 
   const isFormInvalid = isUsernameFieldInvalid || isEmailFieldInvalid || isTextFieldInvalid;
 
-  const isDialogOpen = useSelector(state => state.taskManageDialogState.isOpen);
-  const isDialogBusy = useSelector(state => state.taskManageDialogState.isBusy);
+  const isDialogOpen = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].isOpen);
+  const isDialogBusy = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].isBusy);
 
   const isUneditableFieldDisabled = isDialogBusy || isTaskEditing;
 
@@ -70,17 +74,17 @@ const TaskManageDialog = () => {
     () => {
       if (isDialogBusy) return;
 
-      dispatch(resetTaskManageDialogState());
+      dispatch(resetDialogState(DIALOG_NAME.TASK_MANAGE));
     },
     [isDialogBusy, dispatch],
   );
 
   const changeFormField = useCallback(
     ({ target: { name, value } }) => {
-      dispatch(resetTaskManageDialogGeneralError());
+      dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
 
-      dispatch(resetTaskManageDialogFieldError(name));
-      dispatch(setTaskManageDialogFieldValue({ [name]: value }));
+      dispatch(resetDialogFieldError(DIALOG_NAME.TASK_MANAGE, name));
+      dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { [name]: value }));
 
       if (!isTaskEditing) return;
 
@@ -90,7 +94,7 @@ const TaskManageDialog = () => {
           const newBinaryTaskStatus = binaryTaskStatus ^ TASK_STATUS_MASK.DONE;
           const status = parseInt(newBinaryTaskStatus.toString(2), 10);
 
-          dispatch(setTaskManageDialogFieldValue({ status }));
+          dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { status }));
 
           break;
         }
@@ -108,7 +112,7 @@ const TaskManageDialog = () => {
 
           const status = parseInt(newBinaryTaskStatus.toString(2), 10);
 
-          dispatch(setTaskManageDialogFieldValue({ status }));
+          dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { status }));
 
           break;
         }
@@ -155,7 +159,7 @@ const TaskManageDialog = () => {
     event => {
       const fieldError = validate({ [event.target.name]: event.target.value });
 
-      dispatch(setTaskManageDialogFieldError(fieldError));
+      dispatch(setDialogFieldError(DIALOG_NAME.TASK_MANAGE, fieldError));
     },
     [dispatch, validate],
   );
@@ -164,7 +168,7 @@ const TaskManageDialog = () => {
     event => {
       event.preventDefault();
 
-      dispatch(resetTaskManageDialogGeneralError());
+      dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
 
       const fieldsError = validate({
         ...(!isTaskEditing && { username: usernameFieldValue }),
@@ -172,7 +176,7 @@ const TaskManageDialog = () => {
         text: textFieldValue,
       });
 
-      dispatch(setTaskManageDialogFieldError(fieldsError));
+      dispatch(setDialogFieldError(DIALOG_NAME.TASK_MANAGE, fieldsError));
 
       if (fieldsError.username || fieldsError.email || fieldsError.text) return;
 

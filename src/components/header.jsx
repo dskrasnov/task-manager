@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 
 import resetAuthorizationState from '../action-creators/reset-authorization-state';
-import setLoginDialogOpen from '../action-creators/set-login-dialog-open';
+import setDialogOpen from '../action-creators/set-dialog-open';
+
+import { DIALOG_NAME } from '../constants/commons';
 
 const Header = () => {
   const isAuthorized = !!useSelector(state => state.authorizationState.token);
@@ -16,7 +18,7 @@ const Header = () => {
   const logoutOrOpenLoginDialog = useCallback(
     () => (isAuthorized
       ? dispatch(resetAuthorizationState())
-      : dispatch(setLoginDialogOpen(true))),
+      : dispatch(setDialogOpen(DIALOG_NAME.LOGIN, true))),
     [isAuthorized, dispatch],
   );
 

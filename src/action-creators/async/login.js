@@ -2,27 +2,28 @@ import axios from 'axios';
 
 import Cookies from 'js-cookie';
 
-import resetLoginDialogState from '../reset-login-dialog-state';
-import setLoginDialogFieldError from '../set-login-dialog-field-error';
-import setLoginDialogBusy from '../set-login-dialog-busy';
-import setLoginDialogGeneralError from '../set-login-dialog-general-error';
+import resetDialogState from '../reset-dialog-state';
+import setDialogFieldError from '../set-dialog-field-error';
+import setDialogBusy from '../set-dialog-busy';
+import setDialogGeneralError from '../set-dialog-general-error';
 import readAuthorizationData from './read-authorization-data';
 
 import {
   BACKEND_STATUS,
   BACKEND_URL,
   DEVELOPER_NAME,
+  DIALOG_NAME,
 } from '../../constants/commons';
 
 const login = () => (dispatch, getState) => {
-  const { loginDialogState: { fieldValue: { username, password } } } = getState();
+  const { dialogState: { [DIALOG_NAME.LOGIN]: { fieldValue: { username, password } } } } = getState();
 
   const formData = new FormData();
 
   formData.append('username', username);
   formData.append('password', password);
 
-  dispatch(setLoginDialogBusy(true));
+  dispatch(setDialogBusy(DIALOG_NAME.LOGIN, true));
 
   return axios
     .post(`${BACKEND_URL}login?developer=${DEVELOPER_NAME}`, formData)
@@ -41,17 +42,17 @@ const login = () => (dispatch, getState) => {
         });
 
         dispatch(readAuthorizationData());
-        dispatch(resetLoginDialogState());
+        dispatch(resetDialogState(DIALOG_NAME.LOGIN));
       }
 
       if (status === BACKEND_STATUS.ERROR) {
-        dispatch(setLoginDialogFieldError(message));
-        dispatch(setLoginDialogBusy(false));
+        dispatch(setDialogFieldError(DIALOG_NAME.LOGIN, message));
+        dispatch(setDialogBusy(DIALOG_NAME.LOGIN, false));
       }
     })
     .catch(() => {
-      dispatch(setLoginDialogGeneralError('При входе что-то пошло не так.'));
-      dispatch(setLoginDialogBusy(false));
+      dispatch(setDialogGeneralError(DIALOG_NAME.LOGIN, 'При входе что-то пошло не так.'));
+      dispatch(setDialogBusy(DIALOG_NAME.LOGIN, false));
     });
 };
 
