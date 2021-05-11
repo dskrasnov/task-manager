@@ -14,13 +14,14 @@ import {
 
 import { Alert, AlertTitle } from '@material-ui/lab';
 
+import useDialog from '../use-dialog';
+
 import BusiableButton from './busiable-button';
 
 import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
 import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
-import resetDialogState from '../action-creators/reset-dialog-state';
 import createTask from '../action-creators/async/create-task';
 import editTask from '../action-creators/async/edit-task';
 
@@ -31,6 +32,39 @@ import {
 } from '../constants/commons';
 
 const TaskManageDialog = () => {
+  const validate = useCallback(
+    fieldValue => {
+      const EMAIL_REGEXP = /.+@.+\..+/;
+
+      return ({
+        ...(fieldValue.username !== undefined
+          && fieldValue.username.length === 0
+          && { username: FIELD_EMPTY_ERROR }),
+
+        ...(fieldValue.text !== undefined
+          && fieldValue.text.length === 0
+          && { text: FIELD_EMPTY_ERROR }),
+
+        ...(fieldValue.email !== undefined
+          && !EMAIL_REGEXP.test(fieldValue.email)
+          && { email: 'Некорректный формат адреса' }),
+
+        ...(fieldValue.email !== undefined
+          && fieldValue.email.length === 0
+          && { email: FIELD_EMPTY_ERROR }),
+      });
+    },
+    [],
+  );
+
+  const {
+    isOpen,
+    isBusy,
+    generalError,
+    close,
+    validateField,
+  } = useDialog(DIALOG_NAME.TASK_MANAGE, validate);
+
   const taskId = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.id);
 
   const isTaskEditing = !!taskId;
@@ -55,29 +89,15 @@ const TaskManageDialog = () => {
   const emailFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.email);
   const textFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.text);
 
-  const generalError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].generalError);
-
   const isUsernameFieldInvalid = !!usernameFieldError;
   const isEmailFieldInvalid = !!emailFieldError;
   const isTextFieldInvalid = !!textFieldError;
 
   const isFormInvalid = isUsernameFieldInvalid || isEmailFieldInvalid || isTextFieldInvalid;
 
-  const isDialogOpen = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].isOpen);
-  const isDialogBusy = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].isBusy);
-
-  const isUneditableFieldDisabled = isDialogBusy || isTaskEditing;
+  const isUneditableFieldDisabled = isBusy || isTaskEditing;
 
   const dispatch = useDispatch();
-
-  const closeDialog = useCallback(
-    () => {
-      if (isDialogBusy) return;
-
-      dispatch(resetDialogState(DIALOG_NAME.TASK_MANAGE));
-    },
-    [isDialogBusy, dispatch],
-  );
 
   const changeFormField = useCallback(
     ({ target: { name, value } }) => {
@@ -130,40 +150,6 @@ const TaskManageDialog = () => {
     ],
   );
 
-  const validate = useCallback(
-    fieldValue => {
-      const EMAIL_REGEXP = /.+@.+\..+/;
-
-      return ({
-        ...(fieldValue.username !== undefined
-          && fieldValue.username.length === 0
-          && { username: FIELD_EMPTY_ERROR }),
-
-        ...(fieldValue.text !== undefined
-          && fieldValue.text.length === 0
-          && { text: FIELD_EMPTY_ERROR }),
-
-        ...(fieldValue.email !== undefined
-          && !EMAIL_REGEXP.test(fieldValue.email)
-          && { email: 'Некорректный формат адреса' }),
-
-        ...(fieldValue.email !== undefined
-          && fieldValue.email.length === 0
-          && { email: FIELD_EMPTY_ERROR }),
-      });
-    },
-    [],
-  );
-
-  const validateFieldValue = useCallback(
-    event => {
-      const fieldError = validate({ [event.target.name]: event.target.value });
-
-      dispatch(setDialogFieldError(DIALOG_NAME.TASK_MANAGE, fieldError));
-    },
-    [dispatch, validate],
-  );
-
   const submitData = useCallback(
     event => {
       event.preventDefault();
@@ -195,7 +181,7 @@ const TaskManageDialog = () => {
   );
 
   return (
-    <Dialog open={isDialogOpen} onClose={closeDialog}>
+    <Dialog open={isOpen} onClose={close}>
       <DialogTitle>{dialogTitleText}</DialogTitle>
 
       <form noValidate onSubmit={submitData}>
@@ -211,7 +197,7 @@ const TaskManageDialog = () => {
             helperText={usernameFieldError}
             disabled={isUneditableFieldDisabled}
             onChange={changeFormField}
-            onBlur={validateFieldValue}
+            onBlur={validateField}
           />
 
           <TextField
@@ -225,7 +211,7 @@ const TaskManageDialog = () => {
             helperText={emailFieldError}
             disabled={isUneditableFieldDisabled}
             onChange={changeFormField}
-            onBlur={validateFieldValue}
+            onBlur={validateField}
           />
 
           <TextField
@@ -239,9 +225,9 @@ const TaskManageDialog = () => {
             value={textFieldValue}
             error={isTextFieldInvalid}
             helperText={textFieldError}
-            disabled={isDialogBusy}
+            disabled={isBusy}
             onChange={changeFormField}
-            onBlur={validateFieldValue}
+            onBlur={validateField}
           />
 
           {
@@ -276,8 +262,8 @@ const TaskManageDialog = () => {
         <DialogActions>
           <Button
             color="primary"
-            disabled={isDialogBusy}
-            onClick={closeDialog}
+            disabled={isBusy}
+            onClick={close}
           >
             Отменить
           </Button>
@@ -286,7 +272,7 @@ const TaskManageDialog = () => {
             color="primary"
             disabled={isFormInvalid}
             type="submit"
-            busy={isDialogBusy}
+            busy={isBusy}
           >
             {submitButtonLabel}
           </BusiableButton>

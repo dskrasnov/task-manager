@@ -12,54 +12,19 @@ import {
 
 import { Alert, AlertTitle } from '@material-ui/lab';
 
+import useDialog from '../use-dialog';
+
 import BusiableButton from './busiable-button';
 
 import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
 import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
-import resetDialogState from '../action-creators/reset-dialog-state';
 import login from '../action-creators/async/login';
 
 import { DIALOG_NAME, FIELD_EMPTY_ERROR } from '../constants/commons';
 
 const LoginDialog = () => {
-  const usernameFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldValue.username);
-  const passwordFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldValue.password);
-
-  const usernameFieldError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldError.username);
-  const passwordFieldError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldError.password);
-
-  const generalError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].generalError);
-
-  const isUsernameFieldInvalid = !!usernameFieldError;
-  const isPasswordFieldInvalid = !!passwordFieldError;
-
-  const isFormInvalid = isUsernameFieldInvalid || isPasswordFieldInvalid;
-
-  const isDialogOpen = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].isOpen);
-  const isDialogBusy = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].isBusy);
-
-  const dispatch = useDispatch();
-
-  const closeDialog = useCallback(
-    () => {
-      if (isDialogBusy) return;
-
-      dispatch(resetDialogState(DIALOG_NAME.LOGIN));
-    },
-    [isDialogBusy, dispatch],
-  );
-
-  const changeFormField = useCallback(
-    event => {
-      dispatch(resetDialogGeneralError(DIALOG_NAME.LOGIN));
-      dispatch(resetDialogFieldError(DIALOG_NAME.LOGIN, event.target.name));
-      dispatch(setDialogFieldValue(DIALOG_NAME.LOGIN, { [event.target.name]: event.target.value }));
-    },
-    [dispatch],
-  );
-
   const validate = useCallback(
     fieldValue => ({
       ...(fieldValue.username !== undefined
@@ -73,13 +38,34 @@ const LoginDialog = () => {
     [],
   );
 
-  const validateFieldValue = useCallback(
-    event => {
-      const fieldError = validate({ [event.target.name]: event.target.value });
+  const {
+    isOpen,
+    isBusy,
+    generalError,
+    close,
+    validateField,
+  } = useDialog(DIALOG_NAME.LOGIN, validate);
 
-      dispatch(setDialogFieldError(DIALOG_NAME.LOGIN, fieldError));
+  const usernameFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldValue.username);
+  const passwordFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldValue.password);
+
+  const usernameFieldError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldError.username);
+  const passwordFieldError = useSelector(state => state.dialogState[DIALOG_NAME.LOGIN].fieldError.password);
+
+  const isUsernameFieldInvalid = !!usernameFieldError;
+  const isPasswordFieldInvalid = !!passwordFieldError;
+
+  const isFormInvalid = isUsernameFieldInvalid || isPasswordFieldInvalid;
+
+  const dispatch = useDispatch();
+
+  const changeFormField = useCallback(
+    event => {
+      dispatch(resetDialogGeneralError(DIALOG_NAME.LOGIN));
+      dispatch(resetDialogFieldError(DIALOG_NAME.LOGIN, event.target.name));
+      dispatch(setDialogFieldValue(DIALOG_NAME.LOGIN, { [event.target.name]: event.target.value }));
     },
-    [dispatch, validate],
+    [dispatch],
   );
 
   const submitData = useCallback(
@@ -108,7 +94,7 @@ const LoginDialog = () => {
   );
 
   return (
-    <Dialog open={isDialogOpen} onClose={closeDialog}>
+    <Dialog open={isOpen} onClose={close}>
       <DialogTitle>Вход</DialogTitle>
 
       <form noValidate onSubmit={submitData}>
@@ -122,9 +108,9 @@ const LoginDialog = () => {
             value={usernameFieldValue}
             error={isUsernameFieldInvalid}
             helperText={usernameFieldError}
-            disabled={isDialogBusy}
+            disabled={isBusy}
             onChange={changeFormField}
-            onBlur={validateFieldValue}
+            onBlur={validateField}
           />
 
           <TextField
@@ -137,9 +123,9 @@ const LoginDialog = () => {
             value={passwordFieldValue}
             error={isPasswordFieldInvalid}
             helperText={passwordFieldError}
-            disabled={isDialogBusy}
+            disabled={isBusy}
             onChange={changeFormField}
-            onBlur={validateFieldValue}
+            onBlur={validateField}
           />
 
           {
@@ -158,8 +144,8 @@ const LoginDialog = () => {
         <DialogActions>
           <Button
             color="primary"
-            disabled={isDialogBusy}
-            onClick={closeDialog}
+            disabled={isBusy}
+            onClick={close}
           >
             Отменить
           </Button>
@@ -168,7 +154,7 @@ const LoginDialog = () => {
             color="primary"
             disabled={isFormInvalid}
             type="submit"
-            busy={isDialogBusy}
+            busy={isBusy}
           >
             Войти
           </BusiableButton>
