@@ -5,7 +5,7 @@ const defaultState = [];
 const tasksReducer = (state = defaultState, { type, payload }) => {
   switch (type) {
     case SET_TASKS:
-      return payload;
+      return [...payload];
 
     default:
       return state;
