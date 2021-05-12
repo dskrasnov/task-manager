@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import Cookies from 'js-cookie';
 
-import resetDialogState from '../reset-dialog-state';
+import setDialogOpen from '../set-dialog-open';
 import setDialogFieldError from '../set-dialog-field-error';
 import setDialogBusy from '../set-dialog-busy';
 import setDialogGeneralError from '../set-dialog-general-error';
@@ -42,7 +42,7 @@ const login = () => (dispatch, getState) => {
         });
 
         dispatch(readAuthorizationData());
-        dispatch(resetDialogState(DIALOG_NAME.LOGIN));
+        dispatch(setDialogOpen(DIALOG_NAME.LOGIN), false);
       }
 
       if (status === BACKEND_STATUS.ERROR) {

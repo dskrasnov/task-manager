@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import fetchTasks from './fetch-tasks';
-import resetDialogState from '../reset-dialog-state';
+import setDialogOpen from '../set-dialog-open';
 import setDialogFieldError from '../set-dialog-field-error';
 import setDialogBusy from '../set-dialog-busy';
 import setDialogGeneralError from '../set-dialog-general-error';
@@ -29,7 +29,7 @@ const createTask = () => (dispatch, getState) => {
     .then(({ data: { message, status } }) => {
       if (status === BACKEND_STATUS.OK) {
         dispatch(fetchTasks());
-        dispatch(resetDialogState(DIALOG_NAME.TASK_MANAGE));
+        dispatch(setDialogOpen(DIALOG_NAME.TASK_MANAGE, false));
       }
 
       if (status === BACKEND_STATUS.ERROR) {

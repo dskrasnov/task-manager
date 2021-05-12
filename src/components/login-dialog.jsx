@@ -43,6 +43,7 @@ const LoginDialog = () => {
     isBusy,
     generalError,
     close,
+    resetState,
     validateField,
   } = useDialog(DIALOG_NAME.LOGIN, validate);
 
@@ -94,7 +95,11 @@ const LoginDialog = () => {
   );
 
   return (
-    <Dialog open={isOpen} onClose={close}>
+    <Dialog
+      open={isOpen}
+      onClose={close}
+      onExited={resetState}
+    >
       <DialogTitle>Вход</DialogTitle>
 
       <form noValidate onSubmit={submitData}>

@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import resetDialogState from '../action-creators/reset-dialog-state';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
+import setDialogOpen from '../action-creators/set-dialog-open';
 
 const useDialog = (dialogName, validate) => {
   const isOpen = useSelector(state => state.dialogState[dialogName].isOpen);
@@ -16,9 +17,14 @@ const useDialog = (dialogName, validate) => {
     () => {
       if (isBusy) return;
 
-      dispatch(resetDialogState(dialogName));
+      dispatch(setDialogOpen(dialogName, false));
     },
     [isBusy, dispatch, dialogName],
+  );
+
+  const resetState = useCallback(
+    () => dispatch(resetDialogState(dialogName)),
+    [dispatch, dialogName],
   );
 
   const validateField = useCallback(
@@ -35,6 +41,7 @@ const useDialog = (dialogName, validate) => {
     isBusy,
     generalError,
     close,
+    resetState,
     validateField,
   };
 };
