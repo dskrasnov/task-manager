@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
-import useStyles from '../use-styles';
+import useStyles from '../hooks/use-styles';
 
 const AppLoadingIndicator = () => {
   const classes = useStyles();

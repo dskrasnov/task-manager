@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 
 import { Grid, Typography } from '@material-ui/core';
 
-import TaskCard from './task-card';
+import useStyles from '../hooks/use-styles';
 
-import useStyles from '../use-styles';
+import TaskCard from './task-card';
 
 import { TASKS_PER_PAGE } from '../constants/commons';
 

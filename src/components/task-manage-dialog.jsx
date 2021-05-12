@@ -14,7 +14,7 @@ import {
 
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-import useDialog from '../use-dialog';
+import useDialog from '../hooks/use-dialog';
 
 import BusiableButton from './busiable-button';
 

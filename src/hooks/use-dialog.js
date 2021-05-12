@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useCallback } from 'react';
 
-import resetDialogState from './action-creators/reset-dialog-state';
-import setDialogFieldError from './action-creators/set-dialog-field-error';
+import resetDialogState from '../action-creators/reset-dialog-state';
+import setDialogFieldError from '../action-creators/set-dialog-field-error';
 
 const useDialog = (dialogName, validate) => {
   const isOpen = useSelector(state => state.dialogState[dialogName].isOpen);

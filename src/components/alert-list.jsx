@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid } from '@material-ui/core';
 
-import ErrorAlert from './error-alert';
+import useStyles from '../hooks/use-styles';
 
-import useStyles from '../use-styles';
+import ErrorAlert from './error-alert';
 
 import removeError from '../action-creators/remove-error';
 

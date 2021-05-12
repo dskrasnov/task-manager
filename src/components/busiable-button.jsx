@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button, CircularProgress } from '@material-ui/core';
 
-import useStyles from '../use-styles';
+import useStyles from '../hooks/use-styles';
 
 const BusiableButton = ({ busy, children, color, disabled, ...rest }) => {
   const classes = useStyles();
