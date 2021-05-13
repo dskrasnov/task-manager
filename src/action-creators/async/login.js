@@ -42,7 +42,7 @@ const login = () => (dispatch, getState) => {
         });
 
         dispatch(readAuthorizationData());
-        dispatch(setDialogOpen(DIALOG_NAME.LOGIN), false);
+        dispatch(setDialogOpen(DIALOG_NAME.LOGIN, false));
       }
 
       if (status === BACKEND_STATUS.ERROR) {

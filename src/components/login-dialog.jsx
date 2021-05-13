@@ -61,10 +61,10 @@ const LoginDialog = () => {
   const dispatch = useDispatch();
 
   const changeFormField = useCallback(
-    event => {
+    ({ target: { name, value } }) => {
       dispatch(resetDialogGeneralError(DIALOG_NAME.LOGIN));
-      dispatch(resetDialogFieldError(DIALOG_NAME.LOGIN, event.target.name));
-      dispatch(setDialogFieldValue(DIALOG_NAME.LOGIN, { [event.target.name]: event.target.value }));
+      dispatch(resetDialogFieldError(DIALOG_NAME.LOGIN, name));
+      dispatch(setDialogFieldValue(DIALOG_NAME.LOGIN, { [name]: value }));
     },
     [dispatch],
   );

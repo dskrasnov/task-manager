@@ -11,10 +11,24 @@ import {
   BACKEND_URL,
   DEVELOPER_NAME,
   DIALOG_NAME,
+  TASK_STATUS_MASK,
 } from '../../constants/commons';
 
 const editTask = () => (dispatch, getState) => {
-  const { dialogState: { [DIALOG_NAME.TASK_MANAGE]: { fieldValue: { id, text, status } } } } = getState();
+  const {
+    dialogState: {
+      [DIALOG_NAME.TASK_MANAGE]: {
+        fieldValue: { id, text, oldText, isAlreadyEdited, isDone },
+      },
+    },
+  } = getState();
+
+  // eslint-disable-next-line no-bitwise
+  const binaryTaskStatus = (isDone && TASK_STATUS_MASK.DONE)
+    ^ ((isAlreadyEdited || text !== oldText) && TASK_STATUS_MASK.EDITED);
+
+  const status = parseInt(binaryTaskStatus.toString(2), 10);
+
   const { authorizationState: { token } } = getState();
 
   const formData = new FormData();

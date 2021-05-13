@@ -43,13 +43,13 @@ const TaskCard = ({ id, username, email, text, status }) => {
         email,
         text,
         oldText: text,
-        status,
         isAlreadyEdited: isEdited,
+        isDone,
       }));
 
       dispatch(setDialogOpen(DIALOG_NAME.TASK_MANAGE, true));
     },
-    [dispatch, id, username, email, text, status, isEdited],
+    [dispatch, id, username, email, text, isEdited, isDone],
   );
 
   return (

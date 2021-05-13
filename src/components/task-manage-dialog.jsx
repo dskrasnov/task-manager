@@ -28,7 +28,6 @@ import editTask from '../action-creators/async/edit-task';
 import {
   DIALOG_NAME,
   FIELD_EMPTY_ERROR,
-  TASK_STATUS_MASK,
 } from '../constants/commons';
 
 const TaskManageDialog = () => {
@@ -77,14 +76,7 @@ const TaskManageDialog = () => {
   const emailFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.email);
   const textFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.text);
 
-  const oldTaskText = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.oldText);
-
-  const taskStatus = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.status);
-  const binaryTaskStatus = parseInt(taskStatus, 2);
-  // eslint-disable-next-line no-bitwise
-  const isTaskDone = !!(binaryTaskStatus & TASK_STATUS_MASK.DONE);
-
-  const isAlreadyEdited = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.isAlreadyEdited);
+  const isDone = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.isDone);
 
   const usernameFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.username);
   const emailFieldError = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldError.email);
@@ -103,52 +95,19 @@ const TaskManageDialog = () => {
   const changeFormField = useCallback(
     ({ target: { name, value } }) => {
       dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
-
       dispatch(resetDialogFieldError(DIALOG_NAME.TASK_MANAGE, name));
       dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { [name]: value }));
-
-      if (!isTaskEditing) return;
-
-      switch (name) {
-        case 'status': {
-          // eslint-disable-next-line no-bitwise
-          const newBinaryTaskStatus = binaryTaskStatus ^ TASK_STATUS_MASK.DONE;
-          const status = parseInt(newBinaryTaskStatus.toString(2), 10);
-
-          dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { status }));
-
-          break;
-        }
-
-        case 'text': {
-          if (isAlreadyEdited) break;
-
-          /* eslint-disable no-bitwise */
-
-          const newBinaryTaskStatus = value !== oldTaskText
-            ? binaryTaskStatus | TASK_STATUS_MASK.EDITED
-            : binaryTaskStatus & ~TASK_STATUS_MASK.EDITED;
-
-          /* eslint-enable no-bitwise */
-
-          const status = parseInt(newBinaryTaskStatus.toString(2), 10);
-
-          dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { status }));
-
-          break;
-        }
-
-        default:
-          // no default case
-      }
     },
-    [
-      dispatch,
-      isTaskEditing,
-      binaryTaskStatus,
-      isAlreadyEdited,
-      oldTaskText,
-    ],
+    [dispatch],
+  );
+
+  const changeIsDone = useCallback(
+    ({ target: { name, checked } }) => {
+      dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
+      dispatch(resetDialogFieldError(DIALOG_NAME.TASK_MANAGE, name));
+      dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { [name]: checked }));
+    },
+    [dispatch],
   );
 
   const submitData = useCallback(
@@ -241,9 +200,9 @@ const TaskManageDialog = () => {
                 control={(
                   <Checkbox
                     color="primary"
-                    name="status"
-                    checked={isTaskDone}
-                    onChange={changeFormField}
+                    name="isDone"
+                    checked={isDone}
+                    onChange={changeIsDone}
                   />
                 )}
                 label="Задача выполнена"

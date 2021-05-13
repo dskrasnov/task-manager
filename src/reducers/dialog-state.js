@@ -19,8 +19,8 @@ const defaultState = {
       email: '',
       text: '',
       oldText: null,
-      status: null,
       isAlreadyEdited: false,
+      isDone: false,
     },
 
     fieldError: {
