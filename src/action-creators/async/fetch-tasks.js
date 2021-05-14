@@ -8,7 +8,7 @@ import {
   BACKEND_STATUS,
   BACKEND_URL,
   DEVELOPER_NAME,
-  TASK_SORTING_FIELD,
+  TASK_SORTING_FIELD, TASK_STATUS_MASK,
   TASKS_PER_PAGE,
 } from '../../constants/commons';
 
@@ -37,8 +37,8 @@ const fetchTasks = (
 
   return axios
     .get(`${BACKEND_URL}?developer=${DEVELOPER_NAME}${currentPageParam}${sortingFieldParam}${sortingDirectionParam}`)
-    .then(({ data: { message, status } }) => {
-      if (status === BACKEND_STATUS.OK) {
+    .then(({ data: { message, status: requestStatus } }) => {
+      if (requestStatus === BACKEND_STATUS.OK) {
         dispatch(setTaskListState({
           pagesTotal: Math.ceil(message.total_task_count / TASKS_PER_PAGE),
           ...(currentPage && { currentPage }),
@@ -46,10 +46,21 @@ const fetchTasks = (
           ...(sortingDirection && { sortingDirection }),
         }));
 
-        dispatch(setTasks(message.tasks));
+        dispatch(setTasks(message.tasks.map(({ status: taskStatus, ...rest }) => {
+          const binaryStatus = parseInt(taskStatus, 2);
+
+          /* eslint-disable no-bitwise */
+
+          const isEdited = !!(binaryStatus & TASK_STATUS_MASK.EDITED);
+          const isDone = !!(binaryStatus & TASK_STATUS_MASK.DONE);
+
+          /* eslint-enable no-bitwise */
+
+          return { ...rest, isEdited, isDone };
+        })));
       }
 
-      if (status === BACKEND_STATUS.ERROR) dispatch(addError(message));
+      if (requestStatus === BACKEND_STATUS.ERROR) dispatch(addError(message));
     })
     .catch(() => dispatch(addError('При загрузке задач что-то пошло не так.')))
     .then(() => {

@@ -18,14 +18,14 @@ const editTask = () => (dispatch, getState) => {
   const {
     dialogState: {
       [DIALOG_NAME.TASK_MANAGE]: {
-        fieldValue: { id, text, oldText, isAlreadyEdited, isDone },
+        fieldValue: { id, text, oldText, isEdited, isDone },
       },
     },
   } = getState();
 
   // eslint-disable-next-line no-bitwise
   const binaryTaskStatus = (isDone && TASK_STATUS_MASK.DONE)
-    ^ ((isAlreadyEdited || text !== oldText) && TASK_STATUS_MASK.EDITED);
+    ^ ((isEdited || text !== oldText) && TASK_STATUS_MASK.EDITED);
 
   const status = parseInt(binaryTaskStatus.toString(2), 10);
 

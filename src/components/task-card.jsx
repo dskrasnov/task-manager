@@ -19,18 +19,9 @@ import CheckBox from '@material-ui/icons/CheckBox';
 import setDialogOpen from '../action-creators/set-dialog-open';
 import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 
-import { DIALOG_NAME, TASK_STATUS_MASK } from '../constants/commons';
+import { DIALOG_NAME } from '../constants/commons';
 
-const TaskCard = ({ id, username, email, text, status }) => {
-  const binaryStatus = parseInt(status, 2);
-
-  /* eslint-disable no-bitwise */
-
-  const isEdited = !!(binaryStatus & TASK_STATUS_MASK.EDITED);
-  const isDone = !!(binaryStatus & TASK_STATUS_MASK.DONE);
-
-  /* eslint-enable no-bitwise */
-
+const TaskCard = ({ id, username, email, text, isEdited, isDone }) => {
   const isAuthorized = !!useSelector(state => state.authorizationState.token);
 
   const dispatch = useDispatch();
@@ -43,7 +34,7 @@ const TaskCard = ({ id, username, email, text, status }) => {
         email,
         text,
         oldText: text,
-        isAlreadyEdited: isEdited,
+        isEdited,
         isDone,
       }));
 
@@ -117,7 +108,8 @@ TaskCard.propTypes = {
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  status: PropTypes.number.isRequired,
+  isEdited: PropTypes.bool.isRequired,
+  isDone: PropTypes.bool.isRequired,
 };
 
 export default TaskCard;

@@ -28,7 +28,8 @@ const TaskList = () => {
                   username={task.username}
                   email={task.email}
                   text={task.text}
-                  status={task.status}
+                  isEdited={task.isEdited}
+                  isDone={task.isDone}
                 />
               </Grid>
             ))

@@ -19,7 +19,7 @@ const defaultState = {
       email: '',
       text: '',
       oldText: null,
-      isAlreadyEdited: false,
+      isEdited: false,
       isDone: false,
     },
 

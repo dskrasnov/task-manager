@@ -67,10 +67,10 @@ const TaskManageDialog = () => {
 
   const taskId = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.id);
 
-  const isTaskEditing = !!taskId;
+  const isEditing = !!taskId;
 
-  const dialogTitleText = isTaskEditing ? 'Редактирование задачи' : 'Создание задачи';
-  const submitButtonLabel = isTaskEditing ? 'Сохранить' : 'Создать';
+  const dialogTitleText = isEditing ? 'Редактирование задачи' : 'Создание задачи';
+  const submitButtonLabel = isEditing ? 'Сохранить' : 'Создать';
 
   const usernameFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.username);
   const emailFieldValue = useSelector(state => state.dialogState[DIALOG_NAME.TASK_MANAGE].fieldValue.email);
@@ -88,7 +88,7 @@ const TaskManageDialog = () => {
 
   const isFormInvalid = isUsernameFieldInvalid || isEmailFieldInvalid || isTextFieldInvalid;
 
-  const isUneditableFieldDisabled = isBusy || isTaskEditing;
+  const isUneditableFieldDisabled = isBusy || isEditing;
 
   const dispatch = useDispatch();
 
@@ -117,8 +117,8 @@ const TaskManageDialog = () => {
       dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
 
       const fieldsError = validate({
-        ...(!isTaskEditing && { username: usernameFieldValue }),
-        ...(!isTaskEditing && { email: emailFieldValue }),
+        ...(!isEditing && { username: usernameFieldValue }),
+        ...(!isEditing && { email: emailFieldValue }),
         text: textFieldValue,
       });
 
@@ -126,14 +126,14 @@ const TaskManageDialog = () => {
 
       if (fieldsError.username || fieldsError.email || fieldsError.text) return;
 
-      const action = isTaskEditing ? editTask : createTask;
+      const action = isEditing ? editTask : createTask;
 
       dispatch(action());
     },
     [
       dispatch,
       validate,
-      isTaskEditing,
+      isEditing,
       usernameFieldValue,
       emailFieldValue,
       textFieldValue,
@@ -195,7 +195,7 @@ const TaskManageDialog = () => {
           />
 
           {
-            isTaskEditing && (
+            isEditing && (
               <FormControlLabel
                 control={(
                   <Checkbox
