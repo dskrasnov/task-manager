@@ -16,9 +16,7 @@ import useDialog from '../hooks/use-dialog';
 
 import BusiableButton from './busiable-button';
 
-import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
-import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
 import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
 import login from '../action-creators/async/login';
 
@@ -44,6 +42,7 @@ const LoginDialog = () => {
     generalError,
     close,
     resetState,
+    changeField,
     validateField,
   } = useDialog(DIALOG_NAME.LOGIN, validate);
 
@@ -59,15 +58,6 @@ const LoginDialog = () => {
   const isFormInvalid = isUsernameFieldInvalid || isPasswordFieldInvalid;
 
   const dispatch = useDispatch();
-
-  const changeFormField = useCallback(
-    ({ target: { name, value } }) => {
-      dispatch(resetDialogGeneralError(DIALOG_NAME.LOGIN));
-      dispatch(resetDialogFieldError(DIALOG_NAME.LOGIN, name));
-      dispatch(setDialogFieldValue(DIALOG_NAME.LOGIN, { [name]: value }));
-    },
-    [dispatch],
-  );
 
   const submitData = useCallback(
     event => {
@@ -114,7 +104,7 @@ const LoginDialog = () => {
             error={isUsernameFieldInvalid}
             helperText={usernameFieldError}
             disabled={isBusy}
-            onChange={changeFormField}
+            onChange={changeField}
             onBlur={validateField}
           />
 
@@ -129,7 +119,7 @@ const LoginDialog = () => {
             error={isPasswordFieldInvalid}
             helperText={passwordFieldError}
             disabled={isBusy}
-            onChange={changeFormField}
+            onChange={changeField}
             onBlur={validateField}
           />
 

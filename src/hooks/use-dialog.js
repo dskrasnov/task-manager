@@ -4,6 +4,11 @@ import { useCallback } from 'react';
 import resetDialogState from '../action-creators/reset-dialog-state';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import setDialogOpen from '../action-creators/set-dialog-open';
+import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
+import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
+import setDialogFieldValue from '../action-creators/set-dialog-field-value';
+
+import { DIALOG_NAME } from '../constants/commons';
 
 const useDialog = (dialogName, validate) => {
   const isOpen = useSelector(state => state.dialogState[dialogName].isOpen);
@@ -27,6 +32,15 @@ const useDialog = (dialogName, validate) => {
     [dispatch, dialogName],
   );
 
+  const changeField = useCallback(
+    ({ target: { name, value } }) => {
+      dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
+      dispatch(resetDialogFieldError(DIALOG_NAME.TASK_MANAGE, name));
+      dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { [name]: value }));
+    },
+    [dispatch],
+  );
+
   const validateField = useCallback(
     event => {
       const fieldError = validate({ [event.target.name]: event.target.value });
@@ -42,6 +56,7 @@ const useDialog = (dialogName, validate) => {
     generalError,
     close,
     resetState,
+    changeField,
     validateField,
   };
 };

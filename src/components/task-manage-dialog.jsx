@@ -62,6 +62,7 @@ const TaskManageDialog = () => {
     generalError,
     close,
     resetState,
+    changeField,
     validateField,
   } = useDialog(DIALOG_NAME.TASK_MANAGE, validate);
 
@@ -91,15 +92,6 @@ const TaskManageDialog = () => {
   const isUneditableFieldDisabled = isBusy || isEditing;
 
   const dispatch = useDispatch();
-
-  const changeFormField = useCallback(
-    ({ target: { name, value } }) => {
-      dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
-      dispatch(resetDialogFieldError(DIALOG_NAME.TASK_MANAGE, name));
-      dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { [name]: value }));
-    },
-    [dispatch],
-  );
 
   const changeIsDone = useCallback(
     ({ target: { name, checked } }) => {
@@ -160,7 +152,7 @@ const TaskManageDialog = () => {
             error={isUsernameFieldInvalid}
             helperText={usernameFieldError}
             disabled={isUneditableFieldDisabled}
-            onChange={changeFormField}
+            onChange={changeField}
             onBlur={validateField}
           />
 
@@ -174,7 +166,7 @@ const TaskManageDialog = () => {
             error={isEmailFieldInvalid}
             helperText={emailFieldError}
             disabled={isUneditableFieldDisabled}
-            onChange={changeFormField}
+            onChange={changeField}
             onBlur={validateField}
           />
 
@@ -190,7 +182,7 @@ const TaskManageDialog = () => {
             error={isTextFieldInvalid}
             helperText={textFieldError}
             disabled={isBusy}
-            onChange={changeFormField}
+            onChange={changeField}
             onBlur={validateField}
           />
 
