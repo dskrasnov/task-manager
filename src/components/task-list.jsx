@@ -17,8 +17,8 @@ const TaskList = () => {
   const tasks = useSelector(state => state.tasks);
 
   return (
-    <div className={classes.gridWrapper}>
-      <Grid container spacing={2} className={classes.grid}>
+    <div className={classes.gridAndWrapper}>
+      <Grid container spacing={2} className={classes.gridAndWrapper}>
         {
           tasks.length
             ? tasks.map(task => (

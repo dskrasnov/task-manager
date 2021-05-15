@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  grid: {
+  gridAndWrapper: {
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
   },
-  gridWrapper: {
+  alertList: {
+    paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
   },
