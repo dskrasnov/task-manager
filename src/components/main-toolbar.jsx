@@ -6,7 +6,7 @@ import { Button, Grid, IconButton, MenuItem, Select, Toolbar, Tooltip } from '@m
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
-import fetchTasks from '../action-creators/async/fetch-tasks';
+import fetchTasks from '../action-creators/fetch-tasks';
 import setDialogOpen from '../action-creators/set-dialog-open';
 
 import {

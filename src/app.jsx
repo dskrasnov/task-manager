@@ -11,7 +11,7 @@ import TaskManageDialog from './components/task-manage-dialog';
 import LoginDialog from './components/login-dialog';
 
 import readAuthorizationData from './action-creators/async/read-authorization-data';
-import fetchTasks from './action-creators/async/fetch-tasks';
+import fetchTasks from './action-creators/fetch-tasks';
 
 const App = () => {
   const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);

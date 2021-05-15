@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import fetchTasks from './fetch-tasks';
+import fetchTasks from '../fetch-tasks';
 import setDialogOpen from '../set-dialog-open';
 import setDialogFieldError from '../set-dialog-field-error';
 import setDialogBusy from '../set-dialog-busy';

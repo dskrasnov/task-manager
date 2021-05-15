@@ -7,7 +7,7 @@ import Pagination from '@material-ui/lab/Pagination';
 
 import useStyles from '../hooks/use-styles';
 
-import fetchTasks from '../action-creators/async/fetch-tasks';
+import fetchTasks from '../action-creators/fetch-tasks';
 
 const TaskPagination = () => {
   const classes = useStyles();
