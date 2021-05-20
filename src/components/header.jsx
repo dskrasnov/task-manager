@@ -1,11 +1,9 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Cookies from 'js-cookie';
-
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 
-import resetAuthorizationState from '../action-creators/reset-authorization-state';
+import logout from '../action-creators/logout';
 import setDialogOpen from '../action-creators/set-dialog-open';
 
 import { DIALOG_NAME } from '../constants/commons';
@@ -20,10 +18,7 @@ const Header = () => {
   const logoutOrOpenLoginDialog = useCallback(
     () => {
       if (isAuthorized) {
-        dispatch(resetAuthorizationState());
-
-        Cookies.remove('token');
-        Cookies.remove('tokenExpires');
+        dispatch(logout());
 
         return;
       }

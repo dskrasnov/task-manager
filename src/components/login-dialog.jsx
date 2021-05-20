@@ -18,7 +18,7 @@ import BusiableButton from './busiable-button';
 
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
-import login from '../action-creators/async/login';
+import login from '../action-creators/login';
 
 import { DIALOG_NAME, FIELD_EMPTY_ERROR } from '../constants/commons';
 

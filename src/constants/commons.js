@@ -32,3 +32,8 @@ export const DIALOG_NAME = {
   TASK_MANAGE: 'taskManage',
   LOGIN: 'login',
 };
+
+export const AUTHORIZATION_COOKIE_NAME = {
+  TOKEN: 'token',
+  TOKEN_EXPIRES: 'tokenExpires',
+};

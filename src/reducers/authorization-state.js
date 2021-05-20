@@ -1,6 +1,6 @@
 import {
   SET_AUTHORIZATION_STATE,
-  RESET_AUTHORIZATION_STATE,
+  LOGOUT,
 } from '../constants/action-types';
 
 const defaultState = {
@@ -13,7 +13,7 @@ const authorizationStateReducer = (state = defaultState, { type, payload }) => {
     case SET_AUTHORIZATION_STATE:
       return { ...payload };
 
-    case RESET_AUTHORIZATION_STATE:
+    case LOGOUT:
       return defaultState;
 
     default:
