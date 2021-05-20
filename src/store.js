@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 
 import applicationReducer from './reducers';
-import fetchTasksSaga from './sagas/fetch-tasks';
+import rootSaga from './sagas';
 
 const composeEnhancers = composeWithDevTools({
   trace: true,
@@ -14,6 +14,6 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(applicationReducer, composeEnhancers(applyMiddleware(thunk, sagaMiddleware)));
 
-sagaMiddleware.run(fetchTasksSaga);
+sagaMiddleware.run(rootSaga);
 
 export default store;

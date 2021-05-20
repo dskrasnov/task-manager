@@ -22,7 +22,7 @@ import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
 import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
-import createTask from '../action-creators/async/create-task';
+import createTask from '../action-creators/create-task';
 import editTask from '../action-creators/async/edit-task';
 
 import {
