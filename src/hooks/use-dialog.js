@@ -8,8 +8,6 @@ import resetDialogGeneralError from '../action-creators/reset-dialog-general-err
 import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
 import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 
-import { DIALOG_NAME } from '../constants/commons';
-
 const useDialog = (dialogName, validate) => {
   const isOpen = useSelector(state => state.dialogState[dialogName].isOpen);
   const isBusy = useSelector(state => state.dialogState[dialogName].isBusy);
@@ -34,11 +32,11 @@ const useDialog = (dialogName, validate) => {
 
   const changeField = useCallback(
     ({ target: { name, value } }) => {
-      dispatch(resetDialogGeneralError(DIALOG_NAME.TASK_MANAGE));
-      dispatch(resetDialogFieldError(DIALOG_NAME.TASK_MANAGE, name));
-      dispatch(setDialogFieldValue(DIALOG_NAME.TASK_MANAGE, { [name]: value }));
+      dispatch(resetDialogGeneralError(dialogName));
+      dispatch(resetDialogFieldError(dialogName, name));
+      dispatch(setDialogFieldValue(dialogName, { [name]: value }));
     },
-    [dispatch],
+    [dispatch, dialogName],
   );
 
   const validateField = useCallback(
