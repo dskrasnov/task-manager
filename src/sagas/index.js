@@ -5,6 +5,7 @@ import createTaskSaga from './create-task';
 import loginSaga from './login';
 import logoutSaga from './logout';
 import readAuthorizationDataSaga from './read-authorization-data';
+import editTaskSaga from './edit-task';
 
 function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ function* rootSaga() {
     loginSaga(),
     logoutSaga(),
     readAuthorizationDataSaga(),
+    editTaskSaga(),
   ]);
 }
 

@@ -23,7 +23,7 @@ import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import resetDialogFieldError from '../action-creators/reset-dialog-field-error';
 import resetDialogGeneralError from '../action-creators/reset-dialog-general-error';
 import createTask from '../action-creators/create-task';
-import editTask from '../action-creators/async/edit-task';
+import editTask from '../action-creators/edit-task';
 
 import {
   DIALOG_NAME,
