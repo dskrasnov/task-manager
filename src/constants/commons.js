@@ -1,5 +1,5 @@
 export const BACKEND_URL = 'https://uxcandy.com/~shapoval/test-task-backend/v2/';
-export const DEVELOPER_NAME = 'Name';
+export const DEVELOPER_NAME = 'dskrasnov';
 
 export const BACKEND_STATUS = {
   OK: 'ok',
