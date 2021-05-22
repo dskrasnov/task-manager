@@ -19,8 +19,8 @@ const AlertList = () => {
   if (!errors.length) return null;
 
   return (
-    <div className={classes.gridWrapper}>
-      <Grid container direction="column" spacing={1} className={classes.grid}>
+    <div className={classes.alertList}>
+      <Grid container direction="column" spacing={1} className={classes.gridAndWrapper}>
         {
           errors.map(error => (
             <Grid key={error.id} item>

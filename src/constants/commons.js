@@ -1,5 +1,5 @@
 export const BACKEND_URL = 'https://uxcandy.com/~shapoval/test-task-backend/v2/';
-export const DEVELOPER_NAME = 'Name';
+export const DEVELOPER_NAME = 'dskrasnov';
 
 export const BACKEND_STATUS = {
   OK: 'ok',
@@ -31,4 +31,9 @@ export const TASK_STATUS_MASK = {
 export const DIALOG_NAME = {
   TASK_MANAGE: 'taskManage',
   LOGIN: 'login',
+};
+
+export const AUTHORIZATION_COOKIE_NAME = {
+  TOKEN: 'token',
+  TOKEN_EXPIRES: 'tokenExpires',
 };

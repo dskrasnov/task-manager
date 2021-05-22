@@ -6,7 +6,7 @@ import taskListStateReducer from './task-list-state';
 import dialogStateReducer from './dialog-state';
 import authorizationStateReducer from './authorization-state';
 
-const applicationReducer = combineReducers({
+const rootReducer = combineReducers({
   tasks: tasksReducer,
   errors: errorsReducer,
   taskListState: taskListStateReducer,
@@ -14,4 +14,4 @@ const applicationReducer = combineReducers({
   authorizationState: authorizationStateReducer,
 });
 
-export default applicationReducer;
+export default rootReducer;
