@@ -1,25 +1,44 @@
-import axios from 'axios';
-
 import { call, put, takeEvery, select } from 'redux-saga/effects';
+
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import setDialogBusy from '../action-creators/set-dialog-busy';
 import fetchTasks from '../action-creators/fetch-tasks';
 import setDialogOpen from '../action-creators/set-dialog-open';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import setDialogGeneralError from '../action-creators/set-dialog-general-error';
+import logout from '../action-creators/logout';
 
 import { EDIT_TASK } from '../constants/action-types';
 
 import {
+  AUTHORIZATION_COOKIE_NAME,
   BACKEND_STATUS,
   BACKEND_URL,
   DEVELOPER_NAME,
-  DIALOG_NAME, TASK_STATUS_MASK,
+  DIALOG_NAME,
+  TASK_STATUS_MASK,
 } from '../constants/commons';
 
 function* editTask() {
   try {
     yield put(setDialogBusy(DIALOG_NAME.TASK_MANAGE, true));
+
+    const token = yield call(Cookies.get, AUTHORIZATION_COOKIE_NAME.TOKEN);
+
+    if (!token) {
+      yield put(logout());
+
+      yield put(setDialogGeneralError(
+        DIALOG_NAME.TASK_MANAGE,
+        'У вас нет прав на редактирование задачи. Войдите в систему и повторите попытку.',
+      ));
+
+      yield put(setDialogBusy(DIALOG_NAME.TASK_MANAGE, false));
+
+      return;
+    }
 
     const {
       dialogState: {
@@ -27,7 +46,6 @@ function* editTask() {
           fieldValue: { id, text, oldText, isEdited, isDone },
         },
       },
-      authorizationState: { token },
     } = yield select();
 
     // eslint-disable-next-line no-bitwise
