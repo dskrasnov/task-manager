@@ -4,8 +4,7 @@ import {
 } from '../constants/action-types';
 
 const defaultState = {
-  token: null,
-  tokenExpires: null,
+  isAuthorized: false,
 };
 
 const authorizationStateReducer = (state = defaultState, { type, payload }) => {

@@ -17,7 +17,7 @@ function* readAuthorizationData() {
 
   const tokenExpires = yield call(Cookies.get, AUTHORIZATION_COOKIE_NAME.TOKEN_EXPIRES);
 
-  yield put(setAuthorizationState({ token, tokenExpires }));
+  yield put(setAuthorizationState({ isAuthorized: true }));
 
   const timeout = yield call(getTimeout, tokenExpires);
 
