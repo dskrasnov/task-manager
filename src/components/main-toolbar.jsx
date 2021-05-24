@@ -30,7 +30,7 @@ const MainToolbar = () => {
   const isSortingDirectionButtonShown = sortingField !== TASK_SORTING_FIELD.NO_SORTING;
   const isSortingDirectionAsc = sortingDirection === TASK_SORTING_DIRECTION.ASC;
 
-  const sortingDirectionLabel = isSortingDirectionAsc ? 'По убыванию' : 'По возрастанию';
+  const sortingDirectionLabel = isSortingDirectionAsc ? 'По возрастанию' : 'По убыванию';
 
   const dispatch = useDispatch();
 
