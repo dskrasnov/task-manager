@@ -4,7 +4,7 @@ import {
 } from '../constants/action-types';
 
 const defaultState = {
-  token: null,
+  isAuthorized: false,
   tokenExpires: null,
 };
 

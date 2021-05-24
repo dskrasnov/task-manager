@@ -9,7 +9,7 @@ import setDialogOpen from '../action-creators/set-dialog-open';
 import { DIALOG_NAME } from '../constants/commons';
 
 const Header = () => {
-  const isAuthorized = !!useSelector(state => state.authorizationState.token);
+  const isAuthorized = useSelector(state => state.authorizationState.isAuthorized);
 
   const buttonLabel = isAuthorized ? 'Выйти' : 'Войти';
 

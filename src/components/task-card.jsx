@@ -22,7 +22,7 @@ import setDialogFieldValue from '../action-creators/set-dialog-field-value';
 import { DIALOG_NAME } from '../constants/commons';
 
 const TaskCard = ({ id, username, email, text, isEdited, isDone }) => {
-  const isAuthorized = !!useSelector(state => state.authorizationState.token);
+  const isAuthorized = useSelector(state => state.authorizationState.isAuthorized);
 
   const dispatch = useDispatch();
 
