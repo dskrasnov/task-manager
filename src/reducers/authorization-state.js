@@ -5,7 +5,6 @@ import {
 
 const defaultState = {
   isAuthorized: false,
-  tokenExpires: null,
 };
 
 const authorizationStateReducer = (state = defaultState, { type, payload }) => {
