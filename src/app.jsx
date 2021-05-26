@@ -7,6 +7,7 @@ import AlertList from './components/alert-list';
 import MainToolbar from './components/main-toolbar';
 import TaskList from './components/task-list';
 import TaskPagination from './components/task-pagination';
+import Notification from './components/notification';
 import TaskManageDialog from './components/task-manage-dialog';
 import LoginDialog from './components/login-dialog';
 
@@ -46,6 +47,8 @@ const App = () => {
             <TaskList/>
 
             <TaskPagination/>
+
+            <Notification/>
 
             <TaskManageDialog/>
 
