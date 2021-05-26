@@ -9,6 +9,7 @@ import setDialogOpen from '../action-creators/set-dialog-open';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import setDialogGeneralError from '../action-creators/set-dialog-general-error';
 import logout from '../action-creators/logout';
+import showNotification from '../action-creators/show-notification';
 
 import { EDIT_TASK } from '../constants/action-types';
 
@@ -18,6 +19,7 @@ import {
   BACKEND_URL,
   DEVELOPER_NAME,
   DIALOG_NAME,
+  NOTIFICATION_TYPE,
   TASK_STATUS_MASK,
 } from '../constants/commons';
 
@@ -70,6 +72,7 @@ function* editTask() {
       case BACKEND_STATUS.OK: {
         yield put(fetchTasks());
         yield put(setDialogOpen(DIALOG_NAME.TASK_MANAGE, false));
+        yield put(showNotification(NOTIFICATION_TYPE.SUCCESS, 'Задача успешно сохранена!'));
 
         break;
       }

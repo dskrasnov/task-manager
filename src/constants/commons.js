@@ -37,3 +37,8 @@ export const AUTHORIZATION_COOKIE_NAME = {
   TOKEN: 'token',
   TOKEN_EXPIRES: 'tokenExpires',
 };
+
+export const NOTIFICATION_TYPE = {
+  SUCCESS: 'success',
+  INFO: 'info',
+};

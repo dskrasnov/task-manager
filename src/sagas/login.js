@@ -8,6 +8,7 @@ import setDialogOpen from '../action-creators/set-dialog-open';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import setDialogGeneralError from '../action-creators/set-dialog-general-error';
 import readAuthorizationData from '../action-creators/read-authorization-data';
+import showNotification from '../action-creators/show-notification';
 
 import { LOGIN } from '../constants/action-types';
 
@@ -17,6 +18,7 @@ import {
   BACKEND_URL,
   DEVELOPER_NAME,
   DIALOG_NAME,
+  NOTIFICATION_TYPE,
 } from '../constants/commons';
 
 function* login() {
@@ -62,6 +64,7 @@ function* login() {
 
         yield put(readAuthorizationData());
         yield put(setDialogOpen(DIALOG_NAME.LOGIN, false));
+        yield put(showNotification(NOTIFICATION_TYPE.INFO, 'Вы вошли в систему.'));
 
         break;
       }
