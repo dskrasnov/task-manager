@@ -4,12 +4,12 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 
 import setDialogBusy from '../action-creators/set-dialog-busy';
-import fetchTasks from '../action-creators/fetch-tasks';
 import setDialogOpen from '../action-creators/set-dialog-open';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import setDialogGeneralError from '../action-creators/set-dialog-general-error';
 import logout from '../action-creators/logout';
 import showNotification from '../action-creators/show-notification';
+import setTasks from '../action-creators/set-tasks';
 
 import { EDIT_TASK } from '../constants/action-types';
 
@@ -70,7 +70,16 @@ function* editTask() {
 
     switch (responseStatus) {
       case BACKEND_STATUS.OK: {
-        yield put(fetchTasks());
+        const { tasks } = yield select();
+
+        yield put(
+          setTasks(
+            tasks.map(
+              task => (task.id === id ? { ...task, text, status, isEdited, isDone } : task),
+            ),
+          ),
+        );
+
         yield put(setDialogOpen(DIALOG_NAME.TASK_MANAGE, false));
         yield put(showNotification(NOTIFICATION_TYPE.SUCCESS, 'Задача успешно сохранена!'));
 
