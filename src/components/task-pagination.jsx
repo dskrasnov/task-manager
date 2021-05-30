@@ -20,7 +20,7 @@ const TaskPagination = () => {
   if (pagesTotal < 2) return null;
 
   const changePage = (event, value) => {
-    dispatch(fetchTasks({ currentPage: value }));
+    if (value !== currentPage) dispatch(fetchTasks({ currentPage: value }));
   };
 
   return (
