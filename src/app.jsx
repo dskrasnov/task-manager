@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { Action, createBrowserHistory } from 'history';
+
 import AppLoadingIndicator from './components/app-loading-indicator';
 import Header from './components/header';
 import AlertList from './components/alert-list';
@@ -12,7 +14,7 @@ import TaskManageDialog from './components/task-manage-dialog';
 import LoginDialog from './components/login-dialog';
 
 import readAuthorizationData from './action-creators/read-authorization-data';
-import fetchTasks from './action-creators/fetch-tasks';
+import readTaskListData from './action-creators/read-task-list-data';
 
 const App = () => {
   const isInitialDataLoaded = useSelector(state => state.taskListState.isInitialDataLoaded);
@@ -21,8 +23,14 @@ const App = () => {
 
   useEffect(
     () => {
+      const history = createBrowserHistory();
+
+      history.listen(({ action }) => {
+        if (action === Action.Pop) dispatch(readTaskListData());
+      });
+
+      dispatch(readTaskListData());
       dispatch(readAuthorizationData());
-      dispatch(fetchTasks({ currentPage: 1 }, true));
     },
     [dispatch],
   );

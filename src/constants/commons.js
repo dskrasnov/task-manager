@@ -42,3 +42,11 @@ export const NOTIFICATION_TYPE = {
   SUCCESS: 'success',
   INFO: 'info',
 };
+
+export const TASK_LIST_DEFAULT_STATE = {
+  pagesTotal: 0,
+  currentPage: 1,
+  sortingField: TASK_SORTING_FIELD.NO_SORTING,
+  sortingDirection: TASK_SORTING_DIRECTION.ASC,
+  isInitialDataLoaded: false,
+};
