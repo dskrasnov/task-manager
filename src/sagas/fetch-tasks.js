@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-import { call, put, takeEvery, select } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import addError from '../action-creators/add-error';
 import setTaskListState from '../action-creators/set-task-list-state';
 import setTasks from '../action-creators/set-tasks';
+import fetchTasksActionCreator from '../action-creators/fetch-tasks';
+
+import adaptTask from '../utils/adapt-task';
 
 import { FETCH_TASKS } from '../constants/action-types';
 
@@ -13,11 +16,14 @@ import {
   BACKEND_URL,
   DEVELOPER_NAME,
   TASK_SORTING_FIELD,
-  TASK_STATUS_MASK,
   TASKS_PER_PAGE,
 } from '../constants/commons';
 
-function* fetchTasks({ params: { currentPage, sortingField, sortingDirection }, isInitialDataLoading }) {
+function* fetchTasks({
+  params: { currentPage, sortingField, sortingDirection },
+  isInitialDataLoading,
+  isUnnecessaryForHistory,
+}) {
   try {
     const { taskListState } = yield select();
 
@@ -50,25 +56,30 @@ function* fetchTasks({ params: { currentPage, sortingField, sortingDirection }, 
 
     switch (requestStatus) {
       case BACKEND_STATUS.OK: {
+        const pagesTotal = Math.ceil(message.total_task_count / TASKS_PER_PAGE);
+
+        if (currentPage && currentPage > 1 && currentPage > pagesTotal) {
+          yield put(fetchTasksActionCreator(
+            {
+              currentPage: pagesTotal || 1,
+              ...(sortingField && { sortingField }),
+              ...(sortingDirection && { sortingDirection }),
+            },
+            isInitialDataLoading,
+            isUnnecessaryForHistory,
+          ));
+
+          return;
+        }
+
         yield put(setTaskListState({
-          pagesTotal: Math.ceil(message.total_task_count / TASKS_PER_PAGE),
+          pagesTotal,
           ...(currentPage && { currentPage }),
           ...(sortingField && { sortingField }),
           ...(sortingDirection && { sortingDirection }),
-        }));
+        }, isUnnecessaryForHistory));
 
-        yield put(setTasks(message.tasks.map(({ status: taskStatus, ...rest }) => {
-          const binaryStatus = parseInt(taskStatus, 2);
-
-          /* eslint-disable no-bitwise */
-
-          const isEdited = !!(binaryStatus & TASK_STATUS_MASK.EDITED);
-          const isDone = !!(binaryStatus & TASK_STATUS_MASK.DONE);
-
-          /* eslint-enable no-bitwise */
-
-          return { ...rest, isEdited, isDone };
-        })));
+        yield put(setTasks(message.tasks.map(adaptTask)));
 
         break;
       }
@@ -90,7 +101,7 @@ function* fetchTasks({ params: { currentPage, sortingField, sortingDirection }, 
 }
 
 function* fetchTasksSaga() {
-  yield takeEvery(FETCH_TASKS, fetchTasks);
+  yield takeLatest(FETCH_TASKS, fetchTasks);
 }
 
 export default fetchTasksSaga;
