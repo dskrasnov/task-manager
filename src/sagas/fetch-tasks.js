@@ -7,6 +7,8 @@ import setTaskListState from '../action-creators/set-task-list-state';
 import setTasks from '../action-creators/set-tasks';
 import fetchTasksActionCreator from '../action-creators/fetch-tasks';
 
+import adaptTask from '../utils/adapt-task';
+
 import { FETCH_TASKS } from '../constants/action-types';
 
 import {
@@ -14,7 +16,6 @@ import {
   BACKEND_URL,
   DEVELOPER_NAME,
   TASK_SORTING_FIELD,
-  TASK_STATUS_MASK,
   TASKS_PER_PAGE,
 } from '../constants/commons';
 
@@ -78,18 +79,7 @@ function* fetchTasks({
           ...(sortingDirection && { sortingDirection }),
         }, isUnnecessaryForHistory));
 
-        yield put(setTasks(message.tasks.map(({ status: taskStatus, ...rest }) => {
-          const binaryStatus = parseInt(taskStatus, 2);
-
-          /* eslint-disable no-bitwise */
-
-          const isEdited = !!(binaryStatus & TASK_STATUS_MASK.EDITED);
-          const isDone = !!(binaryStatus & TASK_STATUS_MASK.DONE);
-
-          /* eslint-enable no-bitwise */
-
-          return { ...rest, isEdited, isDone };
-        })));
+        yield put(setTasks(message.tasks.map(adaptTask)));
 
         break;
       }

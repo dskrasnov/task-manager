@@ -3,11 +3,13 @@ import axios from 'axios';
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 
 import setDialogBusy from '../action-creators/set-dialog-busy';
-import fetchTasks from '../action-creators/fetch-tasks';
 import setDialogOpen from '../action-creators/set-dialog-open';
 import setDialogFieldError from '../action-creators/set-dialog-field-error';
 import setDialogGeneralError from '../action-creators/set-dialog-general-error';
 import showNotification from '../action-creators/show-notification';
+import setTasks from '../action-creators/set-tasks';
+
+import adaptTask from '../utils/adapt-task';
 
 import { CREATE_TASK } from '../constants/action-types';
 
@@ -39,7 +41,13 @@ function* createTask() {
 
     switch (status) {
       case BACKEND_STATUS.OK: {
-        yield put(fetchTasks());
+        const { tasks } = yield select();
+
+        yield put(setTasks([
+          adaptTask(message),
+          ...tasks.slice(0, -1),
+        ]));
+
         yield put(setDialogOpen(DIALOG_NAME.TASK_MANAGE, false));
         yield put(showNotification(NOTIFICATION_TYPE.SUCCESS, 'Задача успешно создана!'));
 
